@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const common = x => ({
   ...x,
   resolve: {
+    modules: ["src", "node_modules"],
     extensions: ['.js', '.ts', '.tsx']
   },
   module: {
@@ -35,7 +36,7 @@ const frontend = common({
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
-    compress: true,
+    compress: false,
     port: 9000
   },
   plugins: [new HtmlWebpackPlugin()]

@@ -4,6 +4,7 @@ let
   pythonPkgs = python-packages: with python-packages; [
       #fastapi - wanted to try fastapi, yet it fails on license collision => try again soon! [update channel]
       flask
+      flask-cors
       #gunicorn
     ]; 
   myPython = pythonCore.withPackages pythonPkgs;

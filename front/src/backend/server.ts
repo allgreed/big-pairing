@@ -1,11 +1,18 @@
 import * as path from 'path';
 import express, {Express} from 'express';
+import webpackMiddleware from 'webpack-dev-middleware';
+import webpack from "webpack";
+import webpackConf from "../../webpack.config";
 
-(async function main() : undefined {
+(async function main(): Promise<void> {
     const app: Express = express();
     const port = 3000;
 
     app.use(express.json());
+
+    const compiler = webpack(webpackConf);
+
+    app.use(webpackMiddleware(compiler));
 
     app.use(
         '/app/',

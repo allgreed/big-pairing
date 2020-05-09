@@ -62,14 +62,14 @@ export class Main
 
                     <label>Facet</label><input
                         type="radio"
-                        name="sex"
+                        name="Male"
                         value="Male"
                         checked={props.values.sex === "Male"}
                         onChange={props.handleChange}
                     />
                     <label>Locha</label><input
                         type="radio"
-                        name="sex"
+                        name="Female"
                         value="Female"
                         checked={props.values.sex === "Female"}
                         onChange={props.handleChange}
@@ -78,7 +78,7 @@ export class Main
 
 
                     {props.errors.name && <div id="feedback">{props.errors.name}</div>}
-                    <button type="submit">Submit</button>
+                    <button type="submit" name="submit">Submit</button>
                 </form>
             )}
         </Formik>

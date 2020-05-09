@@ -3,12 +3,14 @@
     "name": "Piotr Suwała"
   },
   "dependencies": {
+    "@types/webpack-dev-middleware": "^3.7.0",
     "axios": "^0.19.2",
     "formik": "^2.1.4",
     "identity-obj-proxy": "^3.0.0",
     "selenium-webdriver": "^4.0.0-alpha.7",
     "ts-node": "^8.10.1",
     "tslint": "^6.1.2",
+    "webpack-dev-middleware": "^3.7.2",
     "webpack-dev-server": "^3.11.0"
   },
   "description": "Frontend for Big Pairing App",
@@ -43,7 +45,8 @@
   "license": "WTFPL",
   "name": "big-pairing",
   "scripts": {
-    "start": "webpack-dev-server --open",
+    "start": "ts-node ./src/backend/server.ts",
+    "dev": "webpack-dev-server --open",
     "test": "jest"
   },
   "version": "0.1.1"

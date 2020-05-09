@@ -6,7 +6,7 @@ import axios from "axios";
 
 class RegisterDTO {
     constructor(
-        public name: string,
+        public nickname: string,
         public email: string,
         public sex: string,
         public traits: TraitsDTO
@@ -104,7 +104,7 @@ export class Main
                     checked={props.values.sex === "Male"}
                     onChange={props.handleChange}
                 />
-                    <label>Locha</label><input
+                    <label>MordaKobieta</label><input
                     type="radio"
                     name="Female"
                     value="Female"

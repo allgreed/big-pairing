@@ -2,6 +2,27 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../css/Main.css';
 import React from "react";
 import {Formik, FormikProps} from "formik";
+import axios from "axios";
+
+class RegisterDTO {
+    constructor(
+        public name: string,
+        public email: string,
+        public sex: string,
+        public traits: TraitsDTO
+    ) {
+    }
+}
+
+class TraitsDTO {
+    constructor(public extroversion: number,
+                public neuroticism: number,
+                public agreeableness: number,
+                public conscientiousness: number,
+                public openness_to_experience: number
+    ) {
+    }
+}
 
 
 export class Main
@@ -25,6 +46,24 @@ export class Main
         /><br/></span>
     }
 
+    submit(values: any) {
+        const registerDTO = new RegisterDTO(
+            values.name,
+            values.email,
+            values.sex,
+            new TraitsDTO(
+                values.extroversion,
+                values.neuroticism,
+                values.agreeableness,
+                values.conscientiousness,
+                values.openness_to_experience
+            )
+        );
+
+        axios.post("http://localhost:5000/register", registerDTO).then(() => alert("kurwa"));
+        console.log("pozdro");
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     render(): any {
 
@@ -34,10 +73,8 @@ export class Main
                 ...Object.fromEntries(this.bigFive.map((x: any) => [x, 50]))
             }}
             onSubmit={(values: any, actions: any) => {
-                setTimeout(() => {
-                    alert(JSON.stringify(values, null, 2));
-                    actions.setSubmitting(false);
-                }, 1000);
+                this.submit(values);
+
             }}
         >
             {(props: any) => (
@@ -61,20 +98,19 @@ export class Main
                     {this.bigFive.map(x => this.createSlider(props, x))}
 
                     <label>Facet</label><input
-                        type="radio"
-                        name="Male"
-                        value="Male"
-                        checked={props.values.sex === "Male"}
-                        onChange={props.handleChange}
-                    />
+                    type="radio"
+                    name="Male"
+                    value="Male"
+                    checked={props.values.sex === "Male"}
+                    onChange={props.handleChange}
+                />
                     <label>Locha</label><input
-                        type="radio"
-                        name="Female"
-                        value="Female"
-                        checked={props.values.sex === "Female"}
-                        onChange={props.handleChange}
-                    /><br/>
-
+                    type="radio"
+                    name="Female"
+                    value="Female"
+                    checked={props.values.sex === "Female"}
+                    onChange={props.handleChange}
+                /><br/>
 
 
                     {props.errors.name && <div id="feedback">{props.errors.name}</div>}

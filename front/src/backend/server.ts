@@ -3,12 +3,14 @@ import express, {Express} from 'express';
 import webpackMiddleware from 'webpack-dev-middleware';
 import webpack from "webpack";
 import webpackConf from "../../webpack.config";
+import cors from 'cors';
 
 (async function main(): Promise<void> {
     const app: Express = express();
     const port = 3000;
 
     app.use(express.json());
+    app.use(cors());
 
     const compiler = webpack(webpackConf);
 

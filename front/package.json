@@ -5,8 +5,10 @@
   "dependencies": {
     "@types/webpack-dev-middleware": "^3.7.0",
     "axios": "^0.19.2",
+    "cors": "^2.8.5",
     "formik": "^2.1.4",
     "identity-obj-proxy": "^3.0.0",
+    "mockttp": "^0.20.1",
     "selenium-webdriver": "^4.0.0-alpha.7",
     "ts-node": "^8.10.1",
     "tslint": "^6.1.2",

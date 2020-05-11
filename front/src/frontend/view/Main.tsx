@@ -78,6 +78,15 @@ export class Main
             }}
         >
             {(props: any) => (
+                {
+                    // TODO: fill the cite
+                }
+                <blockquote cite="">
+                    A brilliantly lighted ballroom may very well be a flattering setting for a girl dressed for a dance. But for one thing she seldom shows up to her best advantage here precisely because everything requires her to do so — a requirement that has a disturbing effect on her whether she complies with it or does just the opposite. For another, everything is reminiscent of transitoriness and vanity and evokes an impatience that makes the enjoyment less refreshing.
+
+                ~ Søren Kierkegaard
+                </blockquote> 
+
                 <form onSubmit={props.handleSubmit}>
                     <input
                         type="text"

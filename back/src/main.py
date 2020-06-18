@@ -1,30 +1,111 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from fastapi import FastAPI
 
-from src.core import Account, Person, Traits, Sex, PersonRepository
+app = FastAPI()
+
+# TODO: export routes to a proper router
+#from src.routes import the_router
+
+import datetime
+from uuid import UUID, uuid4
+from typing import Sequence, Optional, Any
+
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from pydantic import BaseModel
+
+from src.db import get_db
+from src.core import Traits, User, make_new_user 
+from src.repositories import UserRepository
 
 
-app = Flask(__name__)
-CORS(app)
-
-@app.route("/")
-def hello_world():
-    return "Hello, World!"
+the_router = APIRouter()
 
 
-@app.route("/register", methods = ["POST"])
-def register():
-    assert request.method == "POST"
+def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
+    return UserRepository(db)
 
-    data = request.json
+# --------------------------------------------------
+# TODO: delete this and do some progress in the lib
+import pydantic
+import typing
+def viewmodel(domain_model: "any", omit_fields: Sequence[str] = ()):
+    def class_decorator(cls):
+        class MetaMeta(type(pydantic.BaseModel)):
+            def __new__(_, __, ___, original_dict):
+                    base = domain_model.__pydantic_model__
 
-    a = Account(email=data["email"])
-    t = Traits(**data["traits"])
-    p = Person(nickname=data["nickname"],
-               sex=Sex[data["sex"]],
-               traits=t,
-               account=a,
-              )
+                    dct = {
+                        "__module__": cls.__module__,
+                        "__qualname__": cls.__qualname__,
+                    }
+                    if hasattr(cls, "Config"):
+                        ...
+                    else:
+                        class Config:
+                            orm_mode = True
 
-    pr = PersonRepository()
-    return pr.store(p)
+                        dct["Config"] = Config
+
+                    _initial_annotations = {}
+
+                    for x in omit_fields:
+                        _initial_annotations[x] = typing.Union[typing.Any, type(None)]
+
+                    for annotation_name, annotation in base.__annotations__.items():
+                        if hasattr(annotation, "__pydantic_model__"): # is pydantic model
+                            t = globals().get(f"{annotation.__qualname__}ViewModel")
+
+                            if t and annotation is t.__domain_model__:
+                                _initial_annotations[annotation_name] = t
+
+                    if hasattr(cls, "__annotations__"):
+                        _initial_annotations.update(cls.__annotations__)
+
+                    dct["__annotations__"] = _initial_annotations
+
+                    original_dict.pop("__module__")
+                    original_dict.pop("__qualname__")
+
+                    # avoid unnecessary calls to self
+                    _meta = type(pydantic.BaseModel)
+                    bases = (base, cls)
+
+                    original_dict.update(dct)
+                    _dict = original_dict
+
+                    return super().__new__(_meta, cls.__qualname__, bases, _dict)
+
+        class ResultCls(metaclass=MetaMeta):
+            __domain_model__ = domain_model
+
+            def dict(self, *args, **kwargs):
+                kwargs["exclude"] = set(omit_fields)
+                return super().dict(*args, **kwargs)
+
+        return ResultCls
+    return class_decorator
+# --------------------------------------------------
+
+@viewmodel(Traits)
+class TraitsViewModel:
+    pass
+
+@viewmodel(User)
+class UserViewModel:
+    pass
+
+@viewmodel(User, omit_fields={"uuid"})
+class UserCreateViewModel:
+    pass
+
+@the_router.post("/", response_model=UserViewModel, status_code=201)
+def create(data: UserCreateViewModel, r: UserRepository = Depends(get_user_repository)):
+    new_user = make_new_user(data.dict())
+
+    #with r.write() as r:
+    #    r.add(new_user)
+
+    return new_user
+
+
+app.include_router(the_router, prefix="/users")

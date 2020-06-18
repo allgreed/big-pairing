@@ -1,14 +1,20 @@
-from dataclasses import dataclass
-from enum import Enum, auto
+from uuid import UUID, uuid4
+from enum import Enum
 
-# TODO: trait score, between 0th and 100th percentile
-TraitPercentile = int
-# TODO: here we go again
+from pydantic.dataclasses import dataclass
+from pydantic import conint, constr
+
+
+TraitPercentile = conint(ge=0, le=100)
+# TODO: see the link
+# https://pydantic-docs.helpmanual.io/usage/types/#pydantic-types
+# TODO: fix nix pypi package installation
 Email = str
 
-class Sex(Enum):
-    Male = auto()
-    Female = auto()
+
+class Sex(str, Enum):
+    Male = "Male"
+    Female = "Female"
 
 
 @dataclass
@@ -20,37 +26,16 @@ class Traits:
     openness_to_experience: TraitPercentile
 
 
-# TODO: entity - add id
-class Account:
-    def __init__(self, email: Email) -> None:
-        self.email = email
+@dataclass
+class User:
+    uuid: UUID
+    nickname: str
+    email: Email       
+    sex: Sex
+    traits: Traits
 
 
-# TODO: entity - add id
-class Person:
-    def __init__(self, nickname: str, sex: Sex, traits: Traits, account: Account) -> None:
-        self.nickname = nickname
-        self.sex = sex
-        self.traits = traits
-        # TODO: break this - use id
-        self.account = account
+def make_new_user(data: dict):
+    uuid = uuid4()
 
-    def __repr__(self) -> str:
-        return f"{self.nickname}, {self.sex}, {self.traits}, {self.account}"
-
-
-import json
-from dataclasses import asdict
-
-class PersonRepository():
-    def store(self, p: Person) -> str:
-        p_data = {
-            # TODO: rule of Demeter, heh
-            "email": p.account.email,
-            "nickname": p.nickname,
-            "sex": p.sex.name,
-            "traits": asdict(p.traits)
-        }
-
-        return json.dumps(p_data)
-
+    return User(**data, uuid=uuid)

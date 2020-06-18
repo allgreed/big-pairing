@@ -1,5 +1,5 @@
 # big-pairing-back
-Repo description
+Backend service for Big Pairing project
 
 ## Prerequisites
 - [nix](https://nixos.org/nix/manual/#chap-installation)

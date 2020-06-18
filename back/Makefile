@@ -28,7 +28,7 @@ env-down: ## tear down dev environment
 env-recreate: env-down env-up ## deconstruct current env and create another one
 
 todo: ## list all TODOs in the project
-	grep --color=always -Ri --exclude=Makefile todo .
+	git grep -I --line-number TODO | grep -v 'list all TODOs in the project' | grep TODO
 
 build: setup ## create artifact
 	@echo "Not implemented"; false

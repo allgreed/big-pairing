@@ -1,9 +1,10 @@
 import ReactDOM from 'react-dom';
 
-import {Main} from "./Main";
+
 import React from "react";
+import {Name} from "./dynamo/views/concrete/Name";
 
 const div = document.createElement('div');
-ReactDOM.render(<Main/>, div);
+ReactDOM.render(<Name/>, div);
 
 document.body.appendChild(div);

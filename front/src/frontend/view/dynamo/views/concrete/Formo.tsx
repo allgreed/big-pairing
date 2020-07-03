@@ -1,14 +1,15 @@
-import {Formik, FormikProps} from "formik";
-import React from "react";
-import {Name, RenderProps} from "../content/Name";
-import {Text, UpperFormProps} from "../form/Text";
+import { Formik, FormikProps } from 'formik';
+import React from 'react';
+import { Output, RenderProps } from '../content/Output';
+import { Text, UpperFormProps } from '../form/Text';
 
-//
+function objectFrom(name: string, value: string) {
+    return Object.fromEntries([[name, value]]);
+}
 
-export class Formo extends React.Component<any, any> {
-    constructor(props: any) {
+export class Formo extends React.Component<FormoProps, any> {
+    constructor(props: FormoProps) {
         super(props);
-        this.state = {name: ""};
     }
 
     render() {
@@ -16,40 +17,56 @@ export class Formo extends React.Component<any, any> {
             <div>
                 <div>XD</div>
                 <Formik
-                    initialValues={{
-                        value: ""
-                    }}
+                    enableReinitialize
+                    initialValues={objectFrom(this.props.valueName, 'XD')}
                     onSubmit={(values: any, actions: any) => {
-                        this.submit(values.value);
+                        this.props.onSubmit({
+                            ...this.props.model,
+                            ...values,
+                        });
                     }}
                 >
-                    {
-                        (props: FormikProps<any>) =>
-                            <>
-                                <div>
-                                    <Text formikProps={props} placeholder={"Twoje imię"}/>
-                                </div>
-                                <div>
-                                    <Name model={{name: props.values.value}}/>
-                                </div>
-                            </>
-                    }
+                    {(props: FormikProps<any>) => (
+                        <form onSubmit={props.handleSubmit}>
+                            <div>{this.props.upperForm(props)(this.props.valueName)}</div>
+                            <div>
+                                {this.props.render({
+                                    ...this.props.model,
+                                    ...props.values,
+                                })}
+                            </div>
+                        </form>
+                    )}
                 </Formik>
-            </div>)
-
-    }
-
-
-    submit(value: string) {
-
+            </div>
+        );
     }
 }
 
 class FormoProps {
     constructor(
-        public upperForm: (props: UpperFormProps) => (React.Component),
-        public render: (props: RenderProps) => (React.Component)
-    ) {
-    }
+        public upperForm: (formikProps: FormikProps<any>) => (name: string) => JSX.Element,
+        public render: (model: any) => JSX.Element,
+        public onSubmit: (model: any) => void,
+        public model: any,
+        public valueName: string
+    ) {}
+}
 
+export function getFormo(
+    inputComponent: (x: FormikProps<any>) => (name: string) => JSX.Element,
+    displayComponent: (x: any) => JSX.Element,
+    model: any,
+    valueName: string,
+    onSubmit: (model: any) => void
+): JSX.Element {
+    return (
+        <Formo
+            upperForm={inputComponent}
+            render={displayComponent}
+            onSubmit={onSubmit}
+            model={model}
+            valueName={valueName}
+        />
+    );
 }

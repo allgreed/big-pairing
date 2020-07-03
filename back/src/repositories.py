@@ -1,10 +1,10 @@
 import uuid
-from typing import Sequence
+from typing import Sequence, Optional
 from contextlib import contextmanager
 
 from sqlalchemy import Column, Integer, Float, String, Date, Enum
 from src.db import Base, UUID
-from src.core import User
+from src.core import User, Sex, Traits
 
 
 class SqlUser(Base):
@@ -14,39 +14,50 @@ class SqlUser(Base):
 
     uuid = Column(UUID(), nullable=False, index=True, unique=True)
 
-    #date = Column(Date, nullable=False)
-    ## TODO: how to handle nested things sensibly?
-    #location_latitude = Column(Float, nullable=False)
-    #location_longitude = Column(Float, nullable=False)
-    #weather_temperature_celcius = Column(Float, nullable=False)
+    nickname = Column(String(length=50), nullable=False, unique=True)
+    email = Column(String(length=255), nullable=False, unique=True)
+    sex = Column(Enum(Sex, values_callable=lambda obj: [e.value for e in obj]), nullable=False)
 
-    #kind = Column(Enum(UserKind, values_callable=lambda obj: [e.value for e in obj]), nullable=False)
-    #people_count = Column(Integer, nullable=False)
-    #secret_digest = Column(TheSecret.SqlDbType, nullable=False)
+    # TODO: add trait constraints
+    trait_extroversion = Column(Integer, nullable=False)
+    trait_neuroticism = Column(Integer, nullable=False)
+    trait_agreeableness = Column(Integer, nullable=False)
+    trait_conscientiousness = Column(Integer, nullable=False)
+    trait_openness_to_experience = Column(Integer, nullable=False)
 
-    #@classmethod
-    #def from_core(cls, e: User) -> "SqlUser":
-    #    return cls(uuid=e.uuid.bytes,
-    #        date=e.date,
-    #        location_latitude = e.location.latitude,
-    #        location_longitude = e.location.longitude,
-    #        weather_temperature_celcius = e.weather.temperature_celcius,
-    #        kind = e.kind,
-    #        people_count = e.people_count,
-    #        secret_digest = TheSecret.db_from_core(e.secret_digest),
-    #        )
+    @classmethod
+    def from_core(cls, u: User, id: Optional[int] = None) -> "SqlUser":
+        result = cls(uuid=u.uuid.bytes,
+            nickname=u.nickname,
+            email=u.email,
+            sex=u.sex,
+            trait_extroversion = u.traits.extroversion,
+            trait_neuroticism = u.traits.neuroticism,
+            trait_agreeableness = u.traits.agreeableness,
+            trait_conscientiousness = u.traits.conscientiousness,
+            trait_openness_to_experience = u.traits.openness_to_experience,
+            )
+        if id is not None:
+            result.id = id
 
-    #def to_core(self) -> User:
-    #    return User(
-    #           uuid=uuid.UUID(bytes=self.uuid),
-    #           date=self.date,
-    #           location=Location(latitude=self.location_latitude, longitude=self.location_longitude),
-    #           weather=Weather(temperature_celcius=self.weather_temperature_celcius),
-    #           people_count=self.people_count,
-    #           secret_digest=TheSecret.core_from_db(self.secret_digest),
-    #           kind=self.kind,
-    #        )
+        return result
 
+    def to_core(self) -> User:
+        traits = Traits(
+                extroversion=self.trait_extroversion,
+                neuroticism=self.trait_neuroticism,
+                agreeableness=self.trait_agreeableness,
+                conscientiousness=self.trait_conscientiousness,
+                openness_to_experience=self.trait_openness_to_experience,
+            )
+
+        return User(
+                uuid=uuid.UUID(bytes=self.uuid),
+                nickname=self.nickname,
+                email=self.email,
+                sex=self.sex,
+                traits=traits,
+            )
 
 
 class QueryUserRepository:

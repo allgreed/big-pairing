@@ -102,8 +102,8 @@ class UserCreateViewModel:
 def create(data: UserCreateViewModel, r: UserRepository = Depends(get_user_repository)):
     new_user = make_new_user(data.dict())
 
-    #with r.write() as r:
-    #    r.add(new_user)
+    with r.write() as r:
+        r.add(new_user)
 
     return new_user
 

@@ -13,5 +13,6 @@ pkgs.mkShell {
   with pkgs;
   [
     nomad
+    git
   ];
 }

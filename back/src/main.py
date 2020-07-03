@@ -9,11 +9,11 @@ import datetime
 from uuid import UUID, uuid4
 from typing import Sequence, Optional, Any
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
-from src.db import get_db
+from src.db import get_db, UniqueConstratintViolation
 from src.core import Traits, User, make_new_user 
 from src.repositories import UserRepository
 
@@ -102,8 +102,14 @@ class UserCreateViewModel:
 def create(data: UserCreateViewModel, r: UserRepository = Depends(get_user_repository)):
     new_user = make_new_user(data.dict())
 
-    with r.write() as r:
-        r.add(new_user)
+    try:
+        with r.write() as r:
+            r.add(new_user)
+    except UniqueConstratintViolation as e:
+        # TODO: embedd this into error
+        violation_column = e.args[0].split("users.")[1]
+        # TODO: make this simmilar to the Pydantic formatter - maybe even provide a helper to generate those formats easier
+        raise HTTPException(status_code=403, detail=f"{violation_column} is already taken")
 
     return new_user
 

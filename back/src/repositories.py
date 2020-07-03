@@ -1,9 +1,10 @@
+import re
 import uuid
 from typing import Sequence, Optional
 from contextlib import contextmanager
 
-from sqlalchemy import Column, Integer, Float, String, Date, Enum
-from src.db import Base, UUID
+from sqlalchemy import Column, Integer, Float, String, Date, Enum, exc
+from src.db import Base, UUID, UniqueConstratintViolation
 from src.core import User, Sex, Traits
 
 
@@ -70,7 +71,7 @@ class CommandUserRepository(QueryUserRepository):
         self.db = db
 
     def add(self, e: User):
-        self.db.add(SqlUser.from_core(e))
+            self.db.add(SqlUser.from_core(e))
 
 
 class UserRepository:
@@ -86,4 +87,11 @@ class UserRepository:
         try:
             yield CommandUserRepository(self.db)
         finally:
-            self.db.commit()
+            try:
+                self.db.commit()
+            except exc.IntegrityError as e:
+                match = re.match(r"UNIQUE constraint failed: (.*)", str(e.orig))
+                if match is not None:
+                    raise UniqueConstratintViolation(match.group(1))
+                else:
+                    raise

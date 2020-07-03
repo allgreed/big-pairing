@@ -19,6 +19,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
+class UniqueConstratintViolation(Exception):
+    pass
+
+
 def get_db():
     try:
         db = SessionLocal()

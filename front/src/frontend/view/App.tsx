@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 
 import React from 'react';
-import { Formo, getFormo } from './dynamo/views/concrete/Formo';
+import { Formo } from './dynamo/views/concrete/Formo';
 
 import { Text } from './dynamo/views/form/Text';
 import { Output } from './dynamo/views/content/Output';
@@ -16,31 +16,26 @@ const output = (model: any) => (
     </div>
 );
 
-//<Formo>
-//{(formik) => <Text formikProps=formik placeholder='gowno'>}
-//{output}
-//</Formo>
+const firstComponent: Switchable = (onSubmit, onBack, model) => (
+    <Formo valueName={'name'} onSubmit={onSubmit} model={model}>
+        {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Twoje imie'} />}
+        {output}
+    </Formo>
+);
 
-const firstComponent: Switchable = (onSubmit, onBack, model) =>
-    getFormo(
-        (props) => Text({ formikProps: props, placeholder: 'Twoje imie' }),
-        output,
-        model,
-        'name',
-        onSubmit
-    );
+const secondComponent: Switchable = (onSubmit, onBack, model) => (
+    <Formo valueName={'surname'} onSubmit={onSubmit} model={model}>
+        {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Twoje nazwisko'} />}
+        {output}
+    </Formo>
+);
 
-const secondComponent: Switchable = (onSubmit, onBack, model) =>
-    getFormo(
-        (props) => Text({ formikProps: props, placeholder: 'Twoje nazwio' }),
-        output,
-        model,
-        'surname',
-        onSubmit
-    );
-
-ReactDOM.render(<Switcher switchables={[firstComponent, secondComponent]} />, div);
+ReactDOM.render(
+    <Switcher>
+        {firstComponent}
+        {secondComponent}
+    </Switcher>,
+    div
+);
 
 document.body.appendChild(div);
-
-console.log('KURWA');

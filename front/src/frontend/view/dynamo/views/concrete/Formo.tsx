@@ -28,9 +28,9 @@ export class Formo extends React.Component<FormoProps, any> {
                 >
                     {(props: FormikProps<any>) => (
                         <form onSubmit={props.handleSubmit}>
-                            <div>{this.props.upperForm(props)(this.props.valueName)}</div>
+                            <div>{this.props.children[0](props, this.props.valueName)}</div>
                             <div>
-                                {this.props.render({
+                                {this.props.children[1]({
                                     ...this.props.model,
                                     ...props.values,
                                 })}
@@ -45,28 +45,12 @@ export class Formo extends React.Component<FormoProps, any> {
 
 class FormoProps {
     constructor(
-        public upperForm: (formikProps: FormikProps<any>) => (name: string) => JSX.Element,
-        public render: (model: any) => JSX.Element,
         public onSubmit: (model: any) => void,
         public model: any,
-        public valueName: string
+        public valueName: string,
+        public children: [
+            (formikProps: FormikProps<any>, name: string) => JSX.Element,
+            (model: any) => JSX.Element
+        ]
     ) {}
-}
-
-export function getFormo(
-    inputComponent: (x: FormikProps<any>) => (name: string) => JSX.Element,
-    displayComponent: (x: any) => JSX.Element,
-    model: any,
-    valueName: string,
-    onSubmit: (model: any) => void
-): JSX.Element {
-    return (
-        <Formo
-            upperForm={inputComponent}
-            render={displayComponent}
-            onSubmit={onSubmit}
-            model={model}
-            valueName={valueName}
-        />
-    );
 }

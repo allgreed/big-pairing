@@ -6,7 +6,7 @@ export declare type Switchable = (
     initialModel: any
 ) => JSX.Element;
 
-declare type X = { switchables: Switchable[] };
+declare type X = { children: Switchable[] };
 declare type D = { model: any; index: number };
 export class Switcher extends React.Component<X, D> {
     constructor(props: X) {
@@ -23,7 +23,7 @@ export class Switcher extends React.Component<X, D> {
             }));
         };
         const onBack = (model: any): void => {};
-        const populateSwitchable: JSX.Element[] = this.props.switchables.map((x) =>
+        const populateSwitchable: JSX.Element[] = this.props.children.map((x) =>
             x(onsubmit, onBack, this.state.model)
         );
 

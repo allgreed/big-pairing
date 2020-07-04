@@ -9,12 +9,17 @@ import { Switchable, Switcher } from './dynamo/views/complex/Switcher';
 
 const div = document.createElement('div');
 
-const output = (props: any) => (
+const output = (model: any) => (
     <div>
-        <Output text={`Masz na imię ${props.name}`} />
-        <Output text={`A na nazwisko ${props.surname}`} />
+        <Output value={model.name}>{(value) => `Masz na imię ${value}. `}</Output>
+        <Output value={model.surname}>{(value) => `A na nazwisko ${value}. `}</Output>
     </div>
 );
+
+//<Formo>
+//{(formik) => <Text formikProps=formik placeholder='gowno'>}
+//{output}
+//</Formo>
 
 const firstComponent: Switchable = (onSubmit, onBack, model) =>
     getFormo(

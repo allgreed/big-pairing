@@ -1,9 +1,10 @@
 import React from 'react';
 
 export function Output(props: RenderProps) {
-    return props.text !== undefined ? <span>{props.text}</span> : null;
+    return props.value !== undefined ? <span>{props.children(props.value)}</span> : null;
 }
 
 export class RenderProps {
-    constructor(public text: string) {}
+    constructor(public value: string, public children: (value: string) => string) {
+    }
 }

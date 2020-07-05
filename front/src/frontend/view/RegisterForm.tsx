@@ -40,8 +40,8 @@ export function RegisterForm() {
             <Output value={model.conscientiousness}>
                 {(value) => `Twoje conscientiousness wynosi ${value}. `}
             </Output>
-            <Output value={model.extraversion}>
-                {(value) => `Twoje extraversion wynosi ${value}. `}
+            <Output value={model.extroversion}>
+                {(value) => `Twoje extroversion wynosi ${value}. `}
             </Output>
             <Output value={model.neurotism}>{(value) => `Twój neurotyzm wynosi ${value}. `}</Output>
             <Output value={model.agreeableness}>
@@ -105,17 +105,17 @@ export function RegisterForm() {
         </Formo>
     );
 
-    const extraversion: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'extraversion'} onSubmit={onSubmit} model={model}>
+    const extroversion: Switchable = (onSubmit, onBack, model) => (
+        <Formo valueName={'extroversion'} onSubmit={onSubmit} model={model}>
             {(p, n) => (
-                <Number formikProps={p} valueName={n} placeholder={'Your BigFive Extraversion'} />
+                <Number formikProps={p} valueName={n} placeholder={'Your BigFive extroversion'} />
             )}
             {output}
         </Formo>
     );
 
     const neurotism: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'neurotism'} onSubmit={onSubmit} model={model}>
+        <Formo valueName={'neuroticism'} onSubmit={onSubmit} model={model}>
             {(p, n) => (
                 <Number formikProps={p} valueName={n} placeholder={'Your BigFive Neuroticism'} />
             )}
@@ -134,9 +134,7 @@ export function RegisterForm() {
 
     const submitto: Switchable = (onSubmit, onBack, model) => (
         <Formo onSubmit={onSubmit} model={model}>
-            {(p, n) => (
-                <Submit formikProps={p} valueName={n} placeholder={'Your BigFive Agreeableness'} />
-            )}
+            {(p, n) => <Submit formikProps={p} valueName={n} placeholder={''} />}
             {output}
         </Formo>
     );
@@ -150,7 +148,7 @@ export function RegisterForm() {
                 {sex}
                 {openness}
                 {conscientiousness}
-                {extraversion}
+                {extroversion}
                 {neurotism}
                 {agreeableness}
                 {submitto}

@@ -1,13 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../css/Main.css';
 import React from 'react';
-import { Output } from './dynamo/views/content/Output';
-import { Switchable, Switcher } from './dynamo/views/complex/Switcher';
-import { Formo } from './dynamo/views/concrete/Formo';
-import { Text } from './dynamo/views/form/Text';
-import { Number } from './dynamo/views/form/Number';
+import { Output } from './dynamo/views/output/Output';
+import { Switchable, Switcher } from './dynamo/Switcher';
+import { Formo } from './dynamo/Formo';
+import { Text } from './dynamo/views/input/Text';
+import { Number } from './dynamo/views/input/Number';
+import { Submit } from './dynamo/views/input/Submit';
 
-export function Main(props: { children?: JSX.Element }) {
+export function RegisterForm() {
     const output = (model: any) => (
         <div>
             <Output value={model.name}>{(value) => `Masz na imię ${value}. `}</Output>
@@ -26,14 +27,14 @@ export function Main(props: { children?: JSX.Element }) {
         </div>
     );
 
-    const firstComponent: Switchable = (onSubmit, onBack, model) => (
+    const firstName: Switchable = (onSubmit, onBack, model) => (
         <Formo valueName={'name'} onSubmit={onSubmit} model={model}>
             {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Twoje imie'} />}
             {output}
         </Formo>
     );
 
-    const secondComponent: Switchable = (onSubmit, onBack, model) => (
+    const secondName: Switchable = (onSubmit, onBack, model) => (
         <Formo valueName={'surname'} onSubmit={onSubmit} model={model}>
             {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Twoje nazwisko'} />}
             {output}
@@ -89,16 +90,26 @@ export function Main(props: { children?: JSX.Element }) {
         </Formo>
     );
 
+    const submitto: Switchable = (onSubmit, onBack, model) => (
+        <Formo onSubmit={onSubmit} model={model}>
+            {(p, n) => (
+                <Submit formikProps={p} valueName={n} placeholder={'Your BigFive Agreeableness'} />
+            )}
+            {output}
+        </Formo>
+    );
+
     return (
         <div id={'main'}>
-            <Switcher>
-                {firstComponent}
-                {secondComponent}
+            <Switcher finalSubmit={(model: any) => console.log(model)}>
+                {firstName}
+                {secondName}
                 {openness}
                 {conscientiousness}
                 {extraversion}
                 {neurotism}
                 {agreeableness}
+                {submitto}
             </Switcher>
         </div>
     );

@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 
 import React from 'react';
-import { Main } from './Main';
+import { RegisterForm } from './RegisterForm';
 
-ReactDOM.render(<Main />, document.body);
+ReactDOM.render(<RegisterForm />, document.body);

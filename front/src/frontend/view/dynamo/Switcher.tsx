@@ -6,8 +6,9 @@ export declare type Switchable = (
     initialModel: any
 ) => JSX.Element;
 
-declare type X = { children: Switchable[] };
+declare type X = { children: Switchable[]; finalSubmit: (model: any) => void };
 declare type D = { model: any; index: number };
+
 export class Switcher extends React.Component<X, D> {
     constructor(props: X) {
         super(props);
@@ -16,14 +17,16 @@ export class Switcher extends React.Component<X, D> {
 
     render() {
         const onsubmit = (model: any): void => {
-            console.log('MASAKRA');
-            this.setState((state, props) => ({
-                model: model,
-                index:
-                    state.index == this.props.children.length - 1 ? state.index : state.index + 1,
-            }));
+            if (this.state.index < this.props.children.length - 1) {
+                this.setState((state, props) => ({
+                    model: model,
+                    index: state.index + 1,
+                }));
+            } else {
+                this.props.finalSubmit(model);
+            }
         };
-        const onBack = (model: any): void => {};
+        const onBack = (model: any) => undefined;
         const populateSwitchable: JSX.Element[] = this.props.children.map((x) =>
             x(onsubmit, onBack, this.state.model)
         );

@@ -1,10 +1,13 @@
 import React from 'react';
 import { FormikProps } from 'formik';
 
-export function Text(props: UpperFormProps) {
+export function Number(props: UpperFormProps) {
     return (
         <input
-            type="text"
+            autoFocus={true}
+            type="number"
+            min={0}
+            max={99}
             onChange={props.formikProps.handleChange}
             placeholder={props.placeholder}
             onBlur={props.formikProps.handleBlur}

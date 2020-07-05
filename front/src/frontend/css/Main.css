@@ -42,6 +42,17 @@ html, body {
     border-bottom: black 5px solid;
 }
 
+.formo > form > div:first-child input[type="radio"] {
+    display: inline;
+    height: 40px;
+    width: 40px;
+}
+
+.formo > form > div:first-child label {
+    display: inline;
+    font-size: 40px;
+}
+
 .formo > form > div:first-child button {
     margin: auto;
     width: 100%;

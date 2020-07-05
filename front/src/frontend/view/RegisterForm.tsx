@@ -10,6 +10,7 @@ import { Submit } from './dynamo/views/input/Submit';
 import axios from 'axios';
 import { TraitsDTO } from './DTO/TraitsDTO';
 import { RegisterDTO } from './DTO/RegisterDTO';
+import { Radio } from './dynamo/views/input/Radio';
 
 function sendModel(model: any) {
     const registerDTO = new RegisterDTO(
@@ -33,9 +34,9 @@ export function RegisterForm() {
         <div>
             <Output value={model.name}>{(value) => `Masz na imię ${value}. `}</Output>
             <Output value={model.surname}>{(value) => `A na nazwisko ${value}. `}</Output>
-            <Output value={model.openness}>{(value) => `Twoje openness wynosi ${value}. `}</Output>
             <Output value={model.email}>{(value) => `Wyślemy Ci info na ${value}. `}</Output>
             <Output value={model.sex}>{(value) => `Twoja płeć to ${value}. `}</Output>
+            <Output value={model.openness}>{(value) => `Twoje openness wynosi ${value}. `}</Output>
             <Output value={model.conscientiousness}>
                 {(value) => `Twoje conscientiousness wynosi ${value}. `}
             </Output>
@@ -72,7 +73,12 @@ export function RegisterForm() {
 
     const sex: Switchable = (onSubmit, onBack, model) => (
         <Formo valueName={'sex'} onSubmit={onSubmit} model={model}>
-            {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Sex?'} />}
+            {(p, n) => (
+                <Radio formikProps={p} valueName={n}>
+                    {['M', 'Man']}
+                    {['F', 'Kobiette']}
+                </Radio>
+            )}
             {output}
         </Formo>
     );

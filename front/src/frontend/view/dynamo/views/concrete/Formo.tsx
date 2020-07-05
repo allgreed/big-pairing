@@ -14,12 +14,12 @@ export class Formo extends React.Component<FormoProps, any> {
 
     render() {
         return (
-            <div>
-                <div>XD</div>
+            <div className={'formo'}>
                 <Formik
+                    key={this.props.valueName}
                     enableReinitialize
-                    initialValues={objectFrom(this.props.valueName, 'XD')}
-                    onSubmit={(values: any, actions: any) => {
+                    initialValues={objectFrom(this.props.valueName, '')}
+                    onSubmit={(values: any) => {
                         this.props.onSubmit({
                             ...this.props.model,
                             ...values,

@@ -1,138 +1,105 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../css/Main.css';
 import React from 'react';
-import { Formik, FormikProps } from 'formik';
-import axios from 'axios';
+import { Output } from './dynamo/views/content/Output';
+import { Switchable, Switcher } from './dynamo/views/complex/Switcher';
+import { Formo } from './dynamo/views/concrete/Formo';
+import { Text } from './dynamo/views/form/Text';
+import { Number } from './dynamo/views/form/Number';
 
-class RegisterDTO {
-    constructor(
-        public nickname: string,
-        public email: string,
-        public sex: string,
-        public traits: TraitsDTO
-    ) {}
-}
+export function Main(props: { children?: JSX.Element }) {
+    const output = (model: any) => (
+        <div>
+            <Output value={model.name}>{(value) => `Masz na imię ${value}. `}</Output>
+            <Output value={model.surname}>{(value) => `A na nazwisko ${value}. `}</Output>
+            <Output value={model.openness}>{(value) => `Twoje openness wynosi ${value}. `}</Output>
+            <Output value={model.conscientiousness}>
+                {(value) => `Twoje conscientiousness wynosi ${value}. `}
+            </Output>
+            <Output value={model.extraversion}>
+                {(value) => `Twoje extraversion wynosi ${value}. `}
+            </Output>
+            <Output value={model.neurotism}>{(value) => `Twój neurotyzm wynosi ${value}. `}</Output>
+            <Output value={model.agreeableness}>
+                {(value) => `Twój agreeableness wynosi ${value}. `}
+            </Output>
+        </div>
+    );
 
-class TraitsDTO {
-    constructor(
-        public extroversion: number,
-        public neuroticism: number,
-        public agreeableness: number,
-        public conscientiousness: number,
-        public openness_to_experience: number
-    ) {}
-}
+    const firstComponent: Switchable = (onSubmit, onBack, model) => (
+        <Formo valueName={'name'} onSubmit={onSubmit} model={model}>
+            {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Twoje imie'} />}
+            {output}
+        </Formo>
+    );
 
-export class Main extends React.Component<{}, {}> {
-    bigFive = [
-        'extroversion',
-        'neuroticism',
-        'agreeableness',
-        'conscientiousness',
-        'openness_to_experience',
-    ];
+    const secondComponent: Switchable = (onSubmit, onBack, model) => (
+        <Formo valueName={'surname'} onSubmit={onSubmit} model={model}>
+            {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Twoje nazwisko'} />}
+            {output}
+        </Formo>
+    );
 
-    constructor(props: {}) {
-        super(props);
-    }
+    const openness: Switchable = (onSubmit, onBack, model) => (
+        <Formo valueName={'openness'} onSubmit={onSubmit} model={model}>
+            {(p, n) => (
+                <Number formikProps={p} valueName={n} placeholder={'Your BigFive Openness'} />
+            )}
+            {output}
+        </Formo>
+    );
 
-    createSlider(props: FormikProps<any>, value: string) {
-        return (
-            <span key={value}>
-                <label>{value}:</label>
-                <input
-                    type="number"
-                    onChange={props.handleChange}
-                    value={props.values[value]}
-                    min={0}
-                    max={100}
-                    onBlur={props.handleBlur}
-                    name={value}
+    const conscientiousness: Switchable = (onSubmit, onBack, model) => (
+        <Formo valueName={'conscientiousness'} onSubmit={onSubmit} model={model}>
+            {(p, n) => (
+                <Number
+                    formikProps={p}
+                    valueName={n}
+                    placeholder={'Your BigFive Conscientiousness'}
                 />
-                <br />
-            </span>
-        );
-    }
+            )}
+            {output}
+        </Formo>
+    );
 
-    submit(values: any) {
-        const registerDTO = new RegisterDTO(
-            values.name,
-            values.email,
-            values.sex,
-            new TraitsDTO(
-                values.extroversion,
-                values.neuroticism,
-                values.agreeableness,
-                values.conscientiousness,
-                values.openness_to_experience
-            )
-        );
+    const extraversion: Switchable = (onSubmit, onBack, model) => (
+        <Formo valueName={'extraversion'} onSubmit={onSubmit} model={model}>
+            {(p, n) => (
+                <Number formikProps={p} valueName={n} placeholder={'Your BigFive Extraversion'} />
+            )}
+            {output}
+        </Formo>
+    );
 
-        axios.post('http://localhost:5000/register', registerDTO).then(() => alert('kurwa'));
-        console.log('pozdro');
-    }
+    const neurotism: Switchable = (onSubmit, onBack, model) => (
+        <Formo valueName={'neurotism'} onSubmit={onSubmit} model={model}>
+            {(p, n) => (
+                <Number formikProps={p} valueName={n} placeholder={'Your BigFive Neuroticism'} />
+            )}
+            {output}
+        </Formo>
+    );
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    render(): any {
-        return (
-            <Formik
-                initialValues={{
-                    name: '',
-                    email: '',
-                    sex: 'Female',
-                    ...Object.fromEntries(this.bigFive.map((x: any) => [x, 50])),
-                }}
-                onSubmit={(values: any, actions: any) => {
-                    this.submit(values);
-                }}
-            >
-                {(props: any) => (
-                    <form onSubmit={props.handleSubmit}>
-                        <input
-                            type="text"
-                            onChange={props.handleChange}
-                            placeholder={'Twoje Imie'}
-                            onBlur={props.handleBlur}
-                            value={props.values.name}
-                            name="name"
-                        />
-                        <br />
-                        <input
-                            type="email"
-                            onChange={props.handleChange}
-                            placeholder={'Twój Email'}
-                            onBlur={props.handleBlur}
-                            value={props.values.email}
-                            name="email"
-                        />
-                        <br />
-                        {this.bigFive.map((x) => this.createSlider(props, x))}
+    const agreeableness: Switchable = (onSubmit, onBack, model) => (
+        <Formo valueName={'agreeableness'} onSubmit={onSubmit} model={model}>
+            {(p, n) => (
+                <Number formikProps={p} valueName={n} placeholder={'Your BigFive Agreeableness'} />
+            )}
+            {output}
+        </Formo>
+    );
 
-                        <label>Facet</label>
-                        <input
-                            type="radio"
-                            name="Male"
-                            value="Male"
-                            checked={props.values.sex === 'Male'}
-                            onChange={props.handleChange}
-                        />
-                        <label>MordaKobieta</label>
-                        <input
-                            type="radio"
-                            name="Female"
-                            value="Female"
-                            checked={props.values.sex === 'Female'}
-                            onChange={props.handleChange}
-                        />
-                        <br />
-
-                        {props.errors.name && <div id="feedback">{props.errors.name}</div>}
-                        <button type="submit" name="submit">
-                            Submit
-                        </button>
-                    </form>
-                )}
-            </Formik>
-        );
-    }
+    return (
+        <div id={'main'}>
+            <Switcher>
+                {firstComponent}
+                {secondComponent}
+                {openness}
+                {conscientiousness}
+                {extraversion}
+                {neurotism}
+                {agreeableness}
+            </Switcher>
+        </div>
+    );
 }

@@ -19,7 +19,8 @@ export class Switcher extends React.Component<X, D> {
             console.log('MASAKRA');
             this.setState((state, props) => ({
                 model: model,
-                index: state.index + 1,
+                index:
+                    state.index == this.props.children.length - 1 ? state.index : state.index + 1,
             }));
         };
         const onBack = (model: any): void => {};
@@ -27,7 +28,7 @@ export class Switcher extends React.Component<X, D> {
             x(onsubmit, onBack, this.state.model)
         );
 
-        return <div>{populateSwitchable[this.state.index]}</div>;
+        return <>{populateSwitchable[this.state.index]}</>;
     }
 }
 

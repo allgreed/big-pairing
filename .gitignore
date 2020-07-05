@@ -1,2 +1,5 @@
 # rendered deployment template
 deploy.nomad
+
+# CI artifact
+.tags

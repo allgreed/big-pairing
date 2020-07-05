@@ -13,6 +13,6 @@ pkgs.mkShell {
   with pkgs;
   [
     nomad
-    git
+    drone-cli
   ];
 }

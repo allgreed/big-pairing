@@ -33,21 +33,13 @@ steps:
 #    - master
 
 - name: deploy
-  image: nixos/nix:2.3
+  image: allgreed/nix:2.3.6
   environment:
     NOMAD_URL:
       from_secret: nomad_url
   commands:
   - VERSION=preview$DRONE_COMMIT_SHA ./deploy.nomad.tpl > deploy.nomad
-  - nix-shell --quiet --run "nomad job run -address=$NOMAD_URL deploy.nomad"
+  - NOMAD_URL=$NOMAD_URL nix-shell --quiet --run "nomad job run -address=$NOMAD_URL deploy.nomad"
   when:
     branch:
     - master
-
-#---
-#kind: pipeline
-#type: docker
-#name: pr
-#trigger:
-#  event:
-#    - pull_request

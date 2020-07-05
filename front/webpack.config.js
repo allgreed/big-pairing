@@ -24,6 +24,7 @@ const common = x => ({
 });
 
 const frontend = common({
+  devtool: 'inline-source-map',
   node: {
     __dirname: false
   },

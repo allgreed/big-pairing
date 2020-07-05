@@ -1,9 +1,6 @@
 import ReactDOM from 'react-dom';
 
-import {Main} from "./Main";
-import React from "react";
+import React from 'react';
+import { RegisterForm } from './RegisterForm';
 
-const div = document.createElement('div');
-ReactDOM.render(<Main/>, div);
-
-document.body.appendChild(div);
+ReactDOM.render(<RegisterForm />, document.body);

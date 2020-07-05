@@ -8,29 +8,28 @@ trigger:
     - pull_request
 
 steps:
-- name: setup
-  image: nixos/nix:2.3
+- name: setup-general
+  image: allgreed/nix:2.3.6
   commands:
-# TODO: how to run nix-shell in a subfolder?
-#  - nix-shell --quiet --run 'make setup'
   - echo -n "latest,preview$DRONE_COMMIT_SHA" > .tags
 
-#- name: build
-#  image: nixos/nix:2.3
-#  commands:
-#  - nix-shell --quiet --run 'make build'
+- name: container-backend
+  image: allgreed/nix:2.3.6
+  commands:
+  - cd back
+  - nix-shell --quiet --run 'make container'
 
-#- name: docker  
-#  image: plugins/docker
-#  settings:
-#    username:
-#      from_secret: docker_username
-#    password:
-#      from_secret: docker_password
-#    repo: allgreed/big-pairing
-#  when:
-#    branch:
-#    - master
+- name: push-backend
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: allgreed/big-pairing
+  when:
+    branch:
+    - master
 
 - name: deploy
   image: allgreed/nix:2.3.6

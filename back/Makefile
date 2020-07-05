@@ -72,6 +72,10 @@ setup-db: $(DB_FILE)
 $(DB_FILE):
 	$(WITH_DB) ./migrate.py $(DB_FILE)
 
+# TODO: figure out why can't move nix stuff here :c
+install:
+	@# noop
+
 # Utilities
 # ###############
 .PHONY: help

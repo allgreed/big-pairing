@@ -1,2 +1,5 @@
 # python compiled
 __pycache__
+
+# sqlite test db
+sqlite.db

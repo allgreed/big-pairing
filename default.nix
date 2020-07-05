@@ -7,27 +7,12 @@ let
     # obtain via `git ls-remote https://github.com/nixos/nixpkgs-channels nixos-unstable`
   };
   pkgs = import nixpkgs { config = {}; };
-  pythonCore = pkgs.python38;
-  pythonPkgs = python-packages: with python-packages; [
-      # TODO: figure out how to keep this out of the generate Docker container
-      pytest
-
-      sqlalchemy
-      fastapi
-      uvicorn
-    ]; 
-  myPython = pythonCore.withPackages pythonPkgs;
 in
 pkgs.mkShell {
   buildInputs =
   with pkgs;
   [
-    sqlite
+    nomad
     git
-    gnumake
-    entr
-
-    myPython
   ];
 }
-# TODO: add Docker support

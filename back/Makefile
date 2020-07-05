@@ -1,5 +1,11 @@
 .DEFAULT_GOAL := help
 SOURCES_DIR := src
+DB_FILE := sqlite.db
+
+PWD = $(shell pwd)
+DB_CONN_STR := sqlite:///${PWD}/$(DB_FILE)
+WITH_DB := DATABASE_CONNECTION_STRING=$(DB_CONN_STR)
+
 
 # TODO: make 'w' flag instead of 's' flag xD
 # TODO: this apparently doesn't work, but is worth fixin'
@@ -16,19 +22,19 @@ endif
 .PHONY: env-up env-down env-recreate container ci run build lint test init
 
 # TODO: add watchmode
-run: setup ## run the app
-	$(BLE) FLASK_APP=src/main.py flask run
+run: setup $(DB_FILE) ## run the app
+	$(WITH_DB) uvicorn src.main:app --reload
 
-env-up: ## set up dev environment
-	@echo "Not implemented"; false
+env-up: setup-db ## set up dev environment
+	@#noop	
 
-env-down: ## tear down dev environment
-	@echo "Not implemented"; false
+env-down: remove-db ## tear down dev environment
+	@#noop	
 
 env-recreate: env-down env-up ## deconstruct current env and create another one
 
 todo: ## list all TODOs in the project
-	grep --color=always -Ri --exclude=Makefile todo .
+	git grep -I --line-number TODO | grep -v 'list all TODOs in the project' | grep TODO
 
 build: setup ## create artifact
 	@echo "Not implemented"; false
@@ -52,10 +58,19 @@ clean: ## remove artifacts
 
 # Plumbing
 # ###############
-.PHONY: setup
+.PHONY: setup remove-db setup-db
 
 setup:
 	@# noop
+
+remove-db:
+	rm -f $(DB_FILE)
+
+setup-db: $(DB_FILE)
+	@# noop
+
+$(DB_FILE):
+	$(WITH_DB) ./migrate.py $(DB_FILE)
 
 # Utilities
 # ###############

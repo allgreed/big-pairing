@@ -11,17 +11,17 @@ import axios from 'axios';
 import { TraitsDTO } from './DTO/TraitsDTO';
 import { RegisterDTO } from './DTO/RegisterDTO';
 
-function sendModel(values: any) {
+function sendModel(model: any) {
     const registerDTO = new RegisterDTO(
-        values.name,
-        values.email,
-        values.sex,
+        `${model.name} ${model.surname}`,
+        model.email,
+        model.sex,
         new TraitsDTO(
-            values.extroversion,
-            values.neuroticism,
-            values.agreeableness,
-            values.conscientiousness,
-            values.openness_to_experience
+            model.extroversion,
+            model.neuroticism,
+            model.agreeableness,
+            model.conscientiousness,
+            model.openness
         )
     );
 
@@ -34,6 +34,8 @@ export function RegisterForm() {
             <Output value={model.name}>{(value) => `Masz na imię ${value}. `}</Output>
             <Output value={model.surname}>{(value) => `A na nazwisko ${value}. `}</Output>
             <Output value={model.openness}>{(value) => `Twoje openness wynosi ${value}. `}</Output>
+            <Output value={model.email}>{(value) => `Wyślemy Ci info na ${value}. `}</Output>
+            <Output value={model.sex}>{(value) => `Twoja płeć to ${value}. `}</Output>
             <Output value={model.conscientiousness}>
                 {(value) => `Twoje conscientiousness wynosi ${value}. `}
             </Output>
@@ -57,6 +59,20 @@ export function RegisterForm() {
     const secondName: Switchable = (onSubmit, onBack, model) => (
         <Formo valueName={'surname'} onSubmit={onSubmit} model={model}>
             {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Twoje nazwisko'} />}
+            {output}
+        </Formo>
+    );
+
+    const email: Switchable = (onSubmit, onBack, model) => (
+        <Formo valueName={'email'} onSubmit={onSubmit} model={model}>
+            {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Email'} />}
+            {output}
+        </Formo>
+    );
+
+    const sex: Switchable = (onSubmit, onBack, model) => (
+        <Formo valueName={'sex'} onSubmit={onSubmit} model={model}>
+            {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Sex?'} />}
             {output}
         </Formo>
     );
@@ -124,6 +140,8 @@ export function RegisterForm() {
             <Switcher finalSubmit={sendModel}>
                 {firstName}
                 {secondName}
+                {email}
+                {sex}
                 {openness}
                 {conscientiousness}
                 {extraversion}

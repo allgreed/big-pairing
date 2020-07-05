@@ -7,6 +7,26 @@ import { Formo } from './dynamo/Formo';
 import { Text } from './dynamo/views/input/Text';
 import { Number } from './dynamo/views/input/Number';
 import { Submit } from './dynamo/views/input/Submit';
+import axios from 'axios';
+import { TraitsDTO } from './DTO/TraitsDTO';
+import { RegisterDTO } from './DTO/RegisterDTO';
+
+function sendModel(values: any) {
+    const registerDTO = new RegisterDTO(
+        values.name,
+        values.email,
+        values.sex,
+        new TraitsDTO(
+            values.extroversion,
+            values.neuroticism,
+            values.agreeableness,
+            values.conscientiousness,
+            values.openness_to_experience
+        )
+    );
+
+    axios.post('http://localhost:5000/register', registerDTO).then(() => alert('kurwa'));
+}
 
 export function RegisterForm() {
     const output = (model: any) => (
@@ -101,7 +121,7 @@ export function RegisterForm() {
 
     return (
         <div id={'main'}>
-            <Switcher finalSubmit={(model: any) => console.log(model)}>
+            <Switcher finalSubmit={sendModel}>
                 {firstName}
                 {secondName}
                 {openness}
@@ -114,3 +134,9 @@ export function RegisterForm() {
         </div>
     );
 }
+
+/*
+A brilliantly lighted ballroom may very well be a flattering setting for a girl dressed for a dance. But for one thing she seldom shows up to her best advantage here precisely because everything requires her to do so — a requirement that has a disturbing effect on her whether she complies with it or does just the opposite. For another, everything is reminiscent of transitoriness and vanity and evokes an impatience that makes the enjoyment less refreshing.
+
+                ~ Søren Kierkegaard
+ */

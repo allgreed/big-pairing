@@ -1,8 +1,8 @@
 import * as path from 'path';
-import express, {Express} from 'express';
+import express, { Express } from 'express';
 import webpackMiddleware from 'webpack-dev-middleware';
-import webpack from "webpack";
-import webpackConf from "../../webpack.config";
+import webpack from 'webpack';
+import webpackConf from '../../webpack.config';
 import cors from 'cors';
 
 (async function main(): Promise<void> {
@@ -21,7 +21,7 @@ import cors from 'cors';
         express.static(path.join(__dirname, '../../dist'), {
             setHeaders(res) {
                 res.set('Access-Control-Allow-Origin', '*');
-            }
+            },
         })
     );
 
@@ -30,12 +30,11 @@ import cors from 'cors';
         express.static(path.join(__dirname, '../../static'), {
             setHeaders(res) {
                 res.set('Access-Control-Allow-Origin', '*');
-            }
+            },
         })
     );
 
     app.get('/', (req, res) => res.redirect('/app'));
 
     app.listen(port, () => console.log(`Wallboard running on port: ${port}!`));
-}());
-
+})();

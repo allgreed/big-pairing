@@ -1,5 +1,4 @@
 FROM node:13
 ADD . .
-VOLUME ["/volume"]
-CMD ["npm", "start"]
+CMD ["npm", "dev"]
 EXPOSE 3000

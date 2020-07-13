@@ -1,0 +1,12 @@
+workspace:
+  base: ./
+
+pipeline:
+  build-node:
+    image: node:13
+    commands:
+      - npm run build
+  create-docker:
+    image: docker:19
+    commands:
+      - docker build -o - . > docker.tar

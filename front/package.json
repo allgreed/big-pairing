@@ -51,6 +51,7 @@
   "name": "big-pairing",
   "scripts": {
     "start": "ts-node ./src/backend/server.ts",
+    "build": "webpack",
     "dev": "webpack-dev-server --open",
     "test": "jest"
   },

@@ -37,7 +37,7 @@ todo: ## list all TODOs in the project
 	git grep -I --line-number TODO | grep -v 'list all TODOs in the project' | grep TODO
 
 build: setup ## create artifact
-	@echo "Not implemented"; false
+	nix build
 
 lint: setup ## run static analysis
 	@echo "Not implemented"; false
@@ -45,8 +45,8 @@ lint: setup ## run static analysis
 test: setup ## run all tests
 	@echo "Not implemented"; false
 
-container: build ## create Docker container
-	@echo "Not implemented"; false
+container: create-container load-container ## create Docker container
+	@# noop
 
 init: ## one time setup
 	direnv allow .
@@ -58,7 +58,7 @@ clean: ## remove artifacts
 
 # Plumbing
 # ###############
-.PHONY: setup remove-db setup-db
+.PHONY: setup remove-db setup-db create-container load-container
 
 setup:
 	@# noop
@@ -68,6 +68,12 @@ remove-db:
 
 setup-db: $(DB_FILE)
 	@# noop
+
+create-container:
+	nix build -f nix/docker.nix
+
+load-container: create-container
+	docker load < result
 
 $(DB_FILE):
 	$(WITH_DB) ./migrate.py $(DB_FILE)

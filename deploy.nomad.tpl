@@ -29,6 +29,8 @@ job "bp" {
     }
   }
 
+
+  # docker run --rm --net host -e DATABASE_CONNECTION_STRING='sqlite:////sqlite.db' -v "$(pwd)"/sqlite.db:/sqlite.db big-pairing-back:builded
   group "back" {
     count = 1
 

@@ -14,12 +14,17 @@ in
 pkgs.stdenv.mkDerivation rec {
   name = "back";
   src = ./.;
-  postInstall =
-     ''
-       cp -r src $out
-       cp main $out
-     '';
-  buildInputs =
+
+  installPhase = ''
+    runHook preInstall
+    
+    mkdir -p $out/${myPython.sitePackages}
+    cp -r . $out/${myPython.sitePackages}/${name}
+
+    runHook postInstall
+  '';
+
+  propagatedbuildInputs =
     with pkgs;
     [
       sqlite
@@ -31,5 +36,5 @@ pkgs.stdenv.mkDerivation rec {
       myPython
       # this is a requirement
     ];
+  buildInputs = propagatedbuildInputs;
 }
-# TODO: add Docker support

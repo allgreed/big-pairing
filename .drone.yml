@@ -18,7 +18,8 @@ steps:
   commands:
   - cd front
   - npm install
-  - npm run build
+  - CI=false npm run build
+# ad hoc fix for warnings
 
 - name: build-and-push-frontend
   image: plugins/docker

@@ -17,6 +17,7 @@ steps:
   image: node:13
   commands:
   - cd front
+  - npm install
   - npm run build
 
 - name: build-and-push-frontend

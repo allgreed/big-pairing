@@ -22,7 +22,9 @@ steps:
 - name: testowy
   image: docker:19
   commands:
-  - docker load < back/result
+  - cd back
+  - ls
+  - docker load < result
   - docker image ls
 
 # TODO: figure out how to load the tar

@@ -13,6 +13,20 @@ steps:
   commands:
   - echo -n "latest,preview$DRONE_COMMIT_SHA" > .tags
 
+- name: container-backend
+  image: allgreed/nix:2.3.6
+  commands:
+  - cd back
+  - nix-shell --quiet --run 'make create-container'
+
+- name: testowy
+  image: docker:19
+  commands:
+  - docker load < back/result
+  - docker image ls
+
+# TODO: figure out how to load the tar
+
 - name: build-frontend
   image: node:13
   commands:
@@ -34,15 +48,6 @@ steps:
   when:
     branch:
     - master
-
-- name: container-backend
-  image: allgreed/nix:2.3.6
-  commands:
-  - cd back
-  - nix-shell --quiet --run 'make create-container'
-  - ls -lah result
-
-# TODO: figure out how to load the tar
 
 - name: deploy
   image: allgreed/nix:2.3.6

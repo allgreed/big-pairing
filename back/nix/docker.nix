@@ -12,9 +12,8 @@ pkgs.dockerTools.buildImage {
 
   config = {
     Cmd = [
-      # TODO: unhardcode this
-      "./nix/store/61brb5mnfp1kk84ah7wq5rb5hi80fz49-python3-3.8.2-env/bin/uvicorn"
-      "src.main:app"
+      # TODO: unhardcode python3.8
+      "${app}/lib/python3.8/site-packages/back/src/main.py"
     ];
 
     ExposedPorts = {
@@ -22,7 +21,7 @@ pkgs.dockerTools.buildImage {
     };
 
     Env = [
-      # TODO: unhardcode this
+      # TODO: unhardcode python3.8
       "PYTHONPATH=${app}/lib/python3.8/site-packages/back/"
     ];
   };

@@ -1,9 +1,12 @@
+#!/usr/bin/env python
+import uvicorn
 from fastapi import FastAPI
+
 
 app = FastAPI()
 
 # TODO: export routes to a proper router
-#from src.routes import the_router
+#from routes import the_router
 
 import datetime
 from uuid import UUID, uuid4
@@ -13,9 +16,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
-from src.db import get_db, UniqueConstratintViolation
-from src.core import Traits, User, make_new_user 
-from src.repositories import UserRepository
+from db import get_db, UniqueConstratintViolation
+from core import Traits, User, make_new_user 
+from repositories import UserRepository
 
 
 the_router = APIRouter()
@@ -115,3 +118,7 @@ def create(data: UserCreateViewModel, r: UserRepository = Depends(get_user_repos
 
 
 app.include_router(the_router, prefix="/users")
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, port=8000, host="0.0.0.0")

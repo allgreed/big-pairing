@@ -1,6 +1,3 @@
-workspace:
-  base: ./
-
 pipeline:
   build-node:
     image: node:13
@@ -9,4 +6,6 @@ pipeline:
   create-docker:
     image: docker:19
     commands:
-      - docker build -o - . > docker.tar
+      - docker build -t big-pairing/mango:0.1 .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

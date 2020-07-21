@@ -13,19 +13,12 @@ steps:
   commands:
   - echo -n "latest,preview$DRONE_COMMIT_SHA" > .tags
 
-- name: container-backend
-  image: allgreed/nix:2.3.6
-  commands:
-  - cd back
-  - nix-shell --quiet --run 'make create-container'
-
-- name: testowy
-  image: docker:19
-  commands:
-  - cd back
-  - ls
-  - docker load < result
-  - docker image ls
+#- name: container-backend
+#  image: allgreed/nix:2.3.6
+#  commands:
+#  - cd back
+#  - nix-shell --quiet --run 'make create-container'
+#  - cp $(readlink -f result) docker-image.tar.gz
 
 # TODO: figure out how to load the tar
 

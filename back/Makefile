@@ -1,6 +1,9 @@
 .DEFAULT_GOAL := help
 SOURCES_DIR := src
 DB_FILE := sqlite.db
+CONTAINER_VERSION := latest
+CONTAINER_PREFIX := allgreed/big-pairing-back
+CONTAINER_NAME := $(CONTAINER_PREFIX):$(CONTAINER_VERSION)
 
 PWD = $(shell pwd)
 DB_CONN_STR := sqlite:///${PWD}/$(DB_FILE)
@@ -9,6 +12,7 @@ WITH_DB := DATABASE_CONNECTION_STRING=$(DB_CONN_STR)
 
 # TODO: make 'w' flag instead of 's' flag xD
 # TODO: this apparently doesn't work, but is worth fixin'
+# TODO: add watchmode to commands
 ifneq (,$(findstring s,$(MAKEFLAGS)))
 	# interactive
 	BLE:= echo $(SOURCES_DIR)/* | entr -c
@@ -21,7 +25,6 @@ endif
 # ###############
 .PHONY: env-up env-down env-recreate container ci run build lint test init
 
-# TODO: add watchmode
 run: setup $(DB_FILE) ## run the app
 	$(WITH_DB) uvicorn src.main:app --reload
 
@@ -45,7 +48,7 @@ lint: setup ## run static analysis
 test: setup ## run all tests
 	@echo "Not implemented"; false
 
-container: create-container load-container ## create Docker container
+container: create-container load-container tag-container ## create Docker container
 	@# noop
 
 init: ## one time setup
@@ -58,7 +61,7 @@ clean: ## remove artifacts
 
 # Plumbing
 # ###############
-.PHONY: setup remove-db setup-db create-container load-container
+.PHONY: setup remove-db setup-db create-container load-container tag-container
 
 setup:
 	@# noop
@@ -74,6 +77,12 @@ create-container:
 
 load-container: create-container
 	docker load < result
+
+tag-container:
+	docker tag big-pairing-back:builded $(CONTAINER_NAME)
+
+push-container:
+	docker push $(CONTAINER_NAME)
 
 $(DB_FILE):
 	$(WITH_DB) ./migrate.py $(DB_FILE)

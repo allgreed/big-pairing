@@ -6,3 +6,6 @@ sqlite.db
 
 # nix artifact
 result
+
+# heh
+docker-image.tar.gz

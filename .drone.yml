@@ -13,20 +13,33 @@ steps:
   commands:
   - echo -n "latest,preview$DRONE_COMMIT_SHA" > .tags
 
-- name: container-backend
-  image: allgreed/nix:2.3.6
-  commands:
-  - cd back
-  - nix-shell --quiet --run 'make container'
+#- name: container-backend
+#  image: allgreed/nix:2.3.6
+#  commands:
+#  - cd back
+#  - nix-shell --quiet --run 'make create-container'
+#  - cp $(readlink -f result) docker-image.tar.gz
 
-- name: push-backend
+# TODO: figure out how to load the tar
+
+- name: build-frontend
+  image: node:13
+  commands:
+  - cd front
+  - npm install
+  - CI=false npm run build
+# ad hoc fix for warnings
+
+- name: build-and-push-frontend
   image: plugins/docker
   settings:
     username:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    repo: allgreed/big-pairing
+    repo: allgreed/big-pairing-frontend
+    context: ./front
+    dockerfile: ./front/Dockerfile
   when:
     branch:
     - master

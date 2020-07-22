@@ -1,0 +1,11 @@
+pipeline:
+  build-node:
+    image: node:13
+    commands:
+      - npm run build
+  create-docker:
+    image: docker:19
+    commands:
+      - docker build -t big-pairing/mango:0.1 .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

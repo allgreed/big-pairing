@@ -26,7 +26,7 @@ endif
 .PHONY: env-up env-down env-recreate container ci run build lint test init
 
 run: setup $(DB_FILE) ## run the app
-	$(WITH_DB) uvicorn src.main:app --reload
+	PYTHONPATH=$(PWD)/$(SOURCES_DIR) $(WITH_DB) uvicorn src.main:app --reload
 
 env-up: setup-db ## set up dev environment
 	@#noop	

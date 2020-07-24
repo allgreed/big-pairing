@@ -27,7 +27,7 @@ function transformToApi(model: any) {
 
 function finalSubmit(model: any) {
     axios
-        .post('/api/users', transformToApi(model))
+        .post('/api/users/', transformToApi(model))
         .then(() => console.log('SEND!'))
         .catch((err) => console.log(err));
 }

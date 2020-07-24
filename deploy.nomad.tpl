@@ -16,6 +16,10 @@ job "bp" {
         }
       }
 
+      env {
+        BACKEND_URL = "https://api.bp.allgreed.pl"
+      }
+
       resources {
         cpu    = 100
         memory = 50

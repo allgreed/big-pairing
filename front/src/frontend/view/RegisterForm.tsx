@@ -7,6 +7,14 @@ import { Formo } from './dynamo/Formo';
 import { Text } from './dynamo/views/input/Text';
 import { Number } from './dynamo/views/input/Number';
 import { Submit } from './dynamo/views/input/Submit';
+import axios from 'axios';
+
+function finalSubmit(model: any) {
+    axios
+        .post('/api', model)
+        .then(() => console.log('jebniete'))
+        .then(() => console.log('KURWA'));
+}
 
 export function RegisterForm() {
     const output = (model: any) => (
@@ -101,7 +109,7 @@ export function RegisterForm() {
 
     return (
         <div id={'main'}>
-            <Switcher finalSubmit={(model: any) => console.log(model)}>
+            <Switcher finalSubmit={(model: any) => finalSubmit(model)}>
                 {firstName}
                 {secondName}
                 {openness}

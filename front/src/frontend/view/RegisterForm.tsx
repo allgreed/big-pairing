@@ -11,9 +11,9 @@ import axios from 'axios';
 
 function finalSubmit(model: any) {
     axios
-        .post('/api', model)
-        .then(() => console.log('jebniete'))
-        .then(() => console.log('KURWA'));
+        .post('/api/users', model)
+        .then(() => console.log('SEND!'))
+        .catch((err) => console.log(err));
 }
 
 export function RegisterForm() {

@@ -25,7 +25,7 @@ import cors from 'cors';
         })
     );
 
-    app.post('/api', (req, res) => res.sendStatus(200));
+    app.post('/api/**/', (req, res) => res.sendStatus(200));
 
     app.use(
         '/static/',

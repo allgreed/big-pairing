@@ -8,10 +8,26 @@ import { Text } from './dynamo/views/input/Text';
 import { Number } from './dynamo/views/input/Number';
 import { Submit } from './dynamo/views/input/Submit';
 import axios from 'axios';
+import { TraitsDTO, UserCreateDTO } from '../../common/api/register/UserCreateDTO';
+
+function transformToApi(model: any) {
+    return new UserCreateDTO(
+        `${model.name} ${model.name}` || 'PIMPUŚ',
+        model.mail || 'no@mail.com',
+        model.sex || 'Male',
+        new TraitsDTO(
+            model.extraversion || 50,
+            model.neurotism || 50,
+            model.agreeableness || 50,
+            model.conscientiousness || 50,
+            model.openness || 50
+        )
+    );
+}
 
 function finalSubmit(model: any) {
     axios
-        .post('/api/users', model)
+        .post('/api/users', transformToApi(model))
         .then(() => console.log('SEND!'))
         .catch((err) => console.log(err));
 }

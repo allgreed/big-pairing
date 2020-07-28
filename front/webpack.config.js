@@ -40,7 +40,7 @@ const frontend = common({
     compress: false,
     port: 9000
   },
-  plugins: [new HtmlWebpackPlugin()]
+  plugins: [new HtmlWebpackPlugin({hash: true})]
 });
 
 module.exports = [frontend];

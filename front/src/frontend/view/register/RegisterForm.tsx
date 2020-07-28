@@ -1,14 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import '../css/Main.css';
+import '../../css/Main.css';
 import React from 'react';
+import axios from 'axios';
+import { TraitsDTO, UserCreateDTO } from '../../../common/api/register/UserCreateDTO';
 import { Output } from './dynamo/views/output/Output';
 import { Switchable, Switcher } from './dynamo/Switcher';
 import { Formo } from './dynamo/Formo';
 import { Text } from './dynamo/views/input/Text';
 import { Number } from './dynamo/views/input/Number';
 import { Submit } from './dynamo/views/input/Submit';
-import axios from 'axios';
-import { TraitsDTO, UserCreateDTO } from '../../common/api/register/UserCreateDTO';
 
 function transformToApi(model: any) {
     return new UserCreateDTO(

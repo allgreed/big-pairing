@@ -108,10 +108,13 @@ def create(data: UserCreateViewModel, r: UserRepository = Depends(get_user_repos
     try:
         with r.write() as r:
             r.add(new_user)
-    except UniqueConstratintViolation as e:
-        # TODO: embedd this into error
-        violation_column = e.args[0].split("users.")[1]
+    except Exception as e:
+        # TODO: fix this PYTHONPATH madness and put UniqueConstratintViolation instead of generic Exception
         # TODO: make this simmilar to the Pydantic formatter - maybe even provide a helper to generate those formats easier
+        # TODO: embedd this stripping logic into error
+        # TODO: make it appear in the documentation
+        # TODO: validate this eagerly
+        violation_column = e.args[0].split("users.")[1]
         raise HTTPException(status_code=403, detail=f"{violation_column} is already taken")
 
     return new_user

@@ -74,9 +74,10 @@ setup-db: $(DB_FILE)
 
 create-container:
 	nix build -f nix/docker.nix
+	mv result docker-image.tar.gz
 
 load-container: create-container
-	docker load < result
+	docker load < docker-image.tar.gz
 
 tag-container:
 	docker tag big-pairing-back:builded $(CONTAINER_NAME)

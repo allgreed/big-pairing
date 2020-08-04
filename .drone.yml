@@ -13,14 +13,25 @@ steps:
   commands:
   - echo -n "latest,preview$DRONE_COMMIT_SHA" > .tags
 
-#- name: container-backend
-#  image: allgreed/nix:2.3.6
-#  commands:
-#  - cd back
-#  - nix-shell --quiet --run 'make create-container'
-#  - cp $(readlink -f result) docker-image.tar.gz
+- name: container-backend
+  image: allgreed/nix:2.3.6
+  commands:
+  - cd back
+  - nix-shell --quiet --run 'make create-container'
+  - cp $(readlink -f docker-image.tar.gz) ../docker-image.tar.gz # need to persist the image between stages and Drone only mounts CWD, so symlinks would fail
+# TODO: odgównić ścieżkę
 
-# TODO: figure out how to load the tar
+- name: load-and-push-backend
+  image: allgreed/drone-docker:preview0
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    load: true
+  when:
+    branch:
+    - master
 
 - name: build-frontend
   image: node:13

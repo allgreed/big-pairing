@@ -13,7 +13,7 @@ export function Output(props: RenderProps) {
 export class RenderProps {
     constructor(
         public value: string,
-        public children: (value: string) => string,
+        public children: (value: string) => JSX.Element,
         public shouldDisplay?: (value: string) => boolean
     ) {}
 }

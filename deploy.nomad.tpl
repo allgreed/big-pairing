@@ -44,9 +44,7 @@ job "bp" {
       }
 
       config {
-        image = "allgreed/big-pairing-back:latest"
-        # TODO: remove the force_pull after figuring out nix-docker image builds on drone cloud
-        force_pull = true
+        image = "allgreed/big-pairing-back:$VERSION"
         port_map = {
             http = 8000
         }

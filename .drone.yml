@@ -24,10 +24,13 @@ steps:
 - name: load-and-push-backend
   image: allgreed/nix:2.3.6
   commands:
-  - nix-env -iA nixpkgs.docker
+  - nix-env --quiet -iA nixpkgs.docker
   - DOCKER_HOST=tcp://68.183.223.124:4243 docker load -i docker-image.tar.gz
   - DOCKER_HOST=tcp://68.183.223.124:4243 docker login -u $USERNAME -p $PASSWORD
-  - DOCKER_HOST=tcp://68.183.223.124:4243 docker push # TODO: ogarnąć tagowanie
+  - DOCKER_HOST=tcp://68.183.223.124:4243 docker tag big-pairing-back:builded allgreed/big-pairing-back:latest
+  - DOCKER_HOST=tcp://68.183.223.124:4243 docker push allgreed/big-pairing-back:latest
+  - DOCKER_HOST=tcp://68.183.223.124:4243 docker tag  allgreed/big-pairing-back:latest allgreed/big-pairing-back:preview$DRONE_COMMIT_SHA
+  - DOCKER_HOST=tcp://68.183.223.124:4243 docker push allgreed/big-pairing-back:preview$DRONE_COMMIT_SHA
   - DOCKER_HOST=tcp://68.183.223.124:4243 docker logout
   environment:
       USERNAME:

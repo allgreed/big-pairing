@@ -1,15 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../../css/Main.css';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import axios from 'axios';
 import { TraitsDTO, UserCreateDTO } from '../../../common/api/register/UserCreateDTO';
-import { Output } from './dynamo/views/output/Output';
-import { Switchable, Switcher } from './dynamo/Switcher';
-import { Formo } from './dynamo/Formo';
-import { Text } from './dynamo/views/input/Text';
-import { Number } from './dynamo/views/input/Number';
-import { Submit } from './dynamo/views/input/Submit';
-import { Radio } from './dynamo/views/input/Radio';
+import { Condition } from './formano/Condition';
+import { Formik, FormikProps } from 'formik';
 
 function transformToApi(model: any) {
     return new UserCreateDTO(
@@ -33,134 +28,136 @@ function finalSubmit(model: any) {
         .catch((err) => console.log(err));
 }
 
+function createHandle(
+    consumer: (value: string) => void
+): (event: ChangeEvent<HTMLInputElement>) => void {
+    return (event: ChangeEvent<HTMLInputElement>) => {
+        console.log('xD');
+        consumer(event.target.value);
+    };
+}
+
 export function RegisterForm() {
-    const output = (model: any) => (
-        <div>
-            <Output value={model.name}>{(value) => `Masz na imię ${value}. `}</Output>
-            <Output value={model.surname}>{(value) => `A na nazwisko ${value}. `}</Output>
-            <Output value={model.sex}>{(value) => `Twoja Płeć to ${value}. `}</Output>
-            <Output value={model.mail}>{(value) => `Napiszemy Ci na ${value}. `}</Output>
-            <Output value={model.openness}>{(value) => `Twoje openness wynosi ${value}. `}</Output>
-            <Output value={model.conscientiousness}>
-                {(value) => `Twoje conscientiousness wynosi ${value}. `}
-            </Output>
-            <Output value={model.extraversion}>
-                {(value) => `Twoje extraversion wynosi ${value}. `}
-            </Output>
-            <Output value={model.neurotism}>{(value) => `Twój neurotyzm wynosi ${value}. `}</Output>
-            <Output value={model.agreeableness}>
-                {(value) => `Twój agreeableness wynosi ${value}. `}
-            </Output>
-        </div>
-    );
-
-    const firstName: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'name'} onSubmit={onSubmit} model={model}>
-            {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Twoje imie'} />}
-            {output}
-        </Formo>
-    );
-
-    const secondName: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'surname'} onSubmit={onSubmit} model={model}>
-            {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Twoje nazwisko'} />}
-            {output}
-        </Formo>
-    );
-
-    const sex: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'sex'} onSubmit={onSubmit} model={model}>
-            {(p, n) => (
-                <Radio formikProps={p} valueName={n}>
-                    {[
-                        { title: 'Facet', value: 'Male' },
-                        { title: 'Kobieta', value: 'Female' },
-                    ]}
-                </Radio>
+    const content = (
+        <Formik
+            enableReinitialize
+            initialValues={{ name: '', surname: '' }}
+            onSubmit={(values: any) => finalSubmit(values)}
+        >
+            {(formik: FormikProps<any>) => (
+                <div>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            formik.handleSubmit(e);
+                        }}
+                    >
+                        Na imię masz{' '}
+                        <input type={'text'} onChange={formik.handleChange} name={'name'} />.
+                        <p>
+                            A na nazwisko{' '}
+                            <input type={'text'} onChange={formik.handleChange} name={'surname'} />
+                        </p>
+                        <p>
+                            Twoja Płeć to{' '}
+                            <select
+                                name="sex"
+                                id="cars"
+                                onChange={formik.handleChange}
+                                placeholder={'Choose Sex...'}
+                            >
+                                <option disabled selected value={''}>
+                                    {' '}
+                                    No sex{' '}
+                                </option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </p>
+                        <p>
+                            Twoj email wyslemy na{' '}
+                            <input type={'text'} onChange={formik.handleChange} name={'mail'} />
+                        </p>
+                        <Condition
+                            eval={() =>
+                                formik.values.name &&
+                                formik.values.surname &&
+                                formik.values.sex &&
+                                formik.values.mail
+                            }
+                        >
+                            <p>
+                                <p>Wypełnij teraz swoje cechy big five</p>
+                                <>
+                                    Twoje Conscientiousness Wynosi{' '}
+                                    <input
+                                        type={'number'}
+                                        min={0}
+                                        max={99}
+                                        onChange={formik.handleChange}
+                                        name={'conscientiousness'}
+                                    />
+                                    <br />
+                                    Twoje Openness Wynosi{' '}
+                                    <input
+                                        type={'number'}
+                                        min={0}
+                                        max={99}
+                                        onChange={formik.handleChange}
+                                        name={'openness'}
+                                    />
+                                    <br />
+                                    Twoje Extraversion Wynosi{' '}
+                                    <input
+                                        type={'number'}
+                                        min={0}
+                                        max={99}
+                                        onChange={formik.handleChange}
+                                        name={'extraversion'}
+                                    />
+                                    <br />
+                                    Twój Neurotism Wynosi{' '}
+                                    <input
+                                        type={'number'}
+                                        min={0}
+                                        max={99}
+                                        onChange={formik.handleChange}
+                                        name={'neurotism'}
+                                    />
+                                    <br />
+                                    Twój Agreeableness Wynosi{' '}
+                                    <input
+                                        type={'number'}
+                                        min={0}
+                                        max={99}
+                                        onChange={formik.handleChange}
+                                        name={'agreeableness'}
+                                    />
+                                    <br />
+                                </>
+                                <Condition
+                                    eval={() =>
+                                        formik.values.conscientiousness &&
+                                        formik.values.openness &&
+                                        formik.values.extraversion &&
+                                        formik.values.neurotism &&
+                                        formik.values.agreeableness
+                                    }
+                                >
+                                    <button
+                                        type={'submit'}
+                                        onSubmit={(e) => e && formik.handleSubmit}
+                                    >
+                                        Zatwierdź
+                                    </button>
+                                </Condition>
+                            </p>
+                        </Condition>
+                    </form>
+                </div>
             )}
-            {output}
-        </Formo>
+        </Formik>
     );
 
-    const email: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'mail'} onSubmit={onSubmit} model={model}>
-            {(p, n) => <Text formikProps={p} valueName={n} placeholder={'Twoj email'} />}
-            {output}
-        </Formo>
-    );
-
-    const openness: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'openness'} onSubmit={onSubmit} model={model}>
-            {(p, n) => (
-                <Number formikProps={p} valueName={n} placeholder={'Your BigFive Openness'} />
-            )}
-            {output}
-        </Formo>
-    );
-
-    const conscientiousness: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'conscientiousness'} onSubmit={onSubmit} model={model}>
-            {(p, n) => (
-                <Number
-                    formikProps={p}
-                    valueName={n}
-                    placeholder={'Your BigFive Conscientiousness'}
-                />
-            )}
-            {output}
-        </Formo>
-    );
-
-    const extraversion: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'extraversion'} onSubmit={onSubmit} model={model}>
-            {(p, n) => (
-                <Number formikProps={p} valueName={n} placeholder={'Your BigFive Extraversion'} />
-            )}
-            {output}
-        </Formo>
-    );
-
-    const neurotism: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'neurotism'} onSubmit={onSubmit} model={model}>
-            {(p, n) => (
-                <Number formikProps={p} valueName={n} placeholder={'Your BigFive Neuroticism'} />
-            )}
-            {output}
-        </Formo>
-    );
-
-    const agreeableness: Switchable = (onSubmit, onBack, model) => (
-        <Formo valueName={'agreeableness'} onSubmit={onSubmit} model={model}>
-            {(p, n) => (
-                <Number formikProps={p} valueName={n} placeholder={'Your BigFive Agreeableness'} />
-            )}
-            {output}
-        </Formo>
-    );
-
-    const submitto: Switchable = (onSubmit, onBack, model) => (
-        <Formo onSubmit={onSubmit} model={model}>
-            {(p, n) => (
-                <Submit formikProps={p} valueName={n} placeholder={'Your BigFive Agreeableness'} />
-            )}
-            {output}
-        </Formo>
-    );
-
-    return (
-        <div id={'main'}>
-            <Switcher finalSubmit={(model: any) => finalSubmit(model)}>
-                {firstName}
-                {secondName}
-                {sex}
-                {email}
-                {openness}
-                {conscientiousness}
-                {extraversion}
-                {neurotism}
-                {agreeableness}
-                {submitto}
-            </Switcher>
-        </div>
-    );
+    return content;
 }

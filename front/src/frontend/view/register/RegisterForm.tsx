@@ -54,41 +54,38 @@ export function RegisterForm() {
                     >
                         Na imię masz{' '}
                         <input type={'text'} onChange={formik.handleChange} name={'name'} />.
-                        <Condition eval={() => formik.values.name}>
-                            <p>
-                                A na nazwisko{' '}
-                                <input
-                                    type={'text'}
-                                    onChange={formik.handleChange}
-                                    name={'surname'}
-                                />
-                            </p>
-                        </Condition>
-                        <Condition eval={() => formik.values.surname}>
-                            <p>
-                                Twoja Płeć to{' '}
-                                <select
-                                    name="sex"
-                                    id="cars"
-                                    onChange={formik.handleChange}
-                                    placeholder={'Choose Sex...'}
-                                >
-                                    <option disabled selected value={''}>
-                                        {' '}
-                                        No sex{' '}
-                                    </option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                            </p>
-                        </Condition>
-                        <Condition eval={() => formik.values.sex}>
-                            <p>
-                                Twoj email wyslemy na{' '}
-                                <input type={'text'} onChange={formik.handleChange} name={'mail'} />
-                            </p>
-                        </Condition>
-                        <Condition eval={() => formik.values.mail}>
+                        <p>
+                            A na nazwisko{' '}
+                            <input type={'text'} onChange={formik.handleChange} name={'surname'} />
+                        </p>
+                        <p>
+                            Twoja Płeć to{' '}
+                            <select
+                                name="sex"
+                                id="cars"
+                                onChange={formik.handleChange}
+                                placeholder={'Choose Sex...'}
+                            >
+                                <option disabled selected value={''}>
+                                    {' '}
+                                    No sex{' '}
+                                </option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </p>
+                        <p>
+                            Twoj email wyslemy na{' '}
+                            <input type={'text'} onChange={formik.handleChange} name={'mail'} />
+                        </p>
+                        <Condition
+                            eval={() =>
+                                formik.values.name &&
+                                formik.values.surname &&
+                                formik.values.sex &&
+                                formik.values.mail
+                            }
+                        >
                             <p>
                                 <p>Wypełnij teraz swoje cechy big five</p>
                                 <>

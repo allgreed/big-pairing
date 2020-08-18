@@ -24,7 +24,6 @@ steps:
 - name: load-and-push-backend
   image: allgreed/nix:2.3.6
   commands:
-  - cd back
   - nix-env -iA nixpkgs.docker
   - DOCKER_HOST=tcp://68.183.223.124:4243 docker load -i docker-image.tar.gz
   - DOCKER_HOST=tcp://68.183.223.124:4243 docker login -u $USERNAME -p $PASSWORD

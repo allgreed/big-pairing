@@ -68,8 +68,7 @@ function Input(props: InputProps) {
 }
 
 export function RegisterForm() {
-    const i = new InputProps('ksi', 'chi', (null as unknown) as FormikProps<any>);
-    const content = (
+    return (
         <Formik
             enableReinitialize
             initialValues={{ name: '', surname: '' }}
@@ -104,9 +103,8 @@ export function RegisterForm() {
                                     placeholder={'Choose Sex...'}
                                     value={formik.values.sex}
                                 >
-                                    <option disabled selected value={''}>
-                                        {' '}
-                                        No sex{' '}
+                                    <option disabled value={''}>
+                                        Select Sex
                                     </option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
@@ -171,6 +169,4 @@ export function RegisterForm() {
             )}
         </Formik>
     );
-
-    return content;
 }

@@ -53,10 +53,21 @@ export function RegisterForm() {
                         }}
                     >
                         Na imię masz{' '}
-                        <input type={'text'} onChange={formik.handleChange} name={'name'} />.
+                        <input
+                            type={'text'}
+                            onChange={formik.handleChange}
+                            name={'name'}
+                            value={formik.values.name}
+                        />
+                        .
                         <p>
                             A na nazwisko{' '}
-                            <input type={'text'} onChange={formik.handleChange} name={'surname'} />
+                            <input
+                                type={'text'}
+                                onChange={formik.handleChange}
+                                name={'surname'}
+                                value={formik.values.surname}
+                            />
                         </p>
                         <p>
                             Twoja Płeć to{' '}
@@ -65,6 +76,7 @@ export function RegisterForm() {
                                 id="cars"
                                 onChange={formik.handleChange}
                                 placeholder={'Choose Sex...'}
+                                value={formik.values.sex}
                             >
                                 <option disabled selected value={''}>
                                     {' '}
@@ -76,7 +88,12 @@ export function RegisterForm() {
                         </p>
                         <p>
                             Twoj email wyslemy na{' '}
-                            <input type={'text'} onChange={formik.handleChange} name={'mail'} />
+                            <input
+                                type={'text'}
+                                onChange={formik.handleChange}
+                                name={'mail'}
+                                value={formik.values.mail}
+                            />
                         </p>
                         <Condition
                             eval={() =>
@@ -96,6 +113,7 @@ export function RegisterForm() {
                                         max={99}
                                         onChange={formik.handleChange}
                                         name={'conscientiousness'}
+                                        value={formik.values.conscientiousness}
                                     />
                                     <br />
                                     Twoje Openness Wynosi{' '}
@@ -105,6 +123,7 @@ export function RegisterForm() {
                                         max={99}
                                         onChange={formik.handleChange}
                                         name={'openness'}
+                                        value={formik.values.openness}
                                     />
                                     <br />
                                     Twoje Extraversion Wynosi{' '}
@@ -114,6 +133,7 @@ export function RegisterForm() {
                                         max={99}
                                         onChange={formik.handleChange}
                                         name={'extraversion'}
+                                        value={formik.values.extraversion}
                                     />
                                     <br />
                                     Twój Neurotism Wynosi{' '}
@@ -123,6 +143,7 @@ export function RegisterForm() {
                                         max={99}
                                         onChange={formik.handleChange}
                                         name={'neurotism'}
+                                        value={formik.values.neurotism}
                                     />
                                     <br />
                                     Twój Agreeableness Wynosi{' '}
@@ -132,6 +153,7 @@ export function RegisterForm() {
                                         max={99}
                                         onChange={formik.handleChange}
                                         name={'agreeableness'}
+                                        value={formik.values.agreeableness}
                                     />
                                     <br />
                                 </>

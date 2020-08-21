@@ -3,7 +3,6 @@ import '../../css/Main.css';
 import React, { ChangeEvent } from 'react';
 import axios from 'axios';
 import { TraitsDTO, UserCreateDTO } from '../../../common/api/register/UserCreateDTO';
-import { Condition } from './formano/Condition';
 import { Formik, FormikProps } from 'formik';
 
 function transformToApi(model: any) {
@@ -117,75 +116,56 @@ export function RegisterForm() {
                         <Input name={'mail'} formik={formik}>
                             Your activation mail will be sent to
                         </Input>
-                        <Condition
-                            eval={() =>
-                                formik.values.name &&
-                                formik.values.surname &&
-                                formik.values.sex &&
-                                formik.values.mail
-                            }
-                        >
-                            <>
-                                <h2>Your Big Five Values</h2>
-                                <Input
-                                    name={'conscientiousness'}
-                                    formik={formik}
-                                    type={'number'}
-                                    additionalProperties={{ min: 0, max: 99 }}
-                                >
-                                    Your conscientiousness is
-                                </Input>
-                                <Input
-                                    name={'openness'}
-                                    formik={formik}
-                                    type={'number'}
-                                    additionalProperties={{ min: 0, max: 99 }}
-                                >
-                                    Your openness is
-                                </Input>
-                                <Input
-                                    name={'extraversion'}
-                                    formik={formik}
-                                    type={'number'}
-                                    additionalProperties={{ min: 0, max: 99 }}
-                                >
-                                    Your extraversion is
-                                </Input>
-                                <Input
-                                    name={'neurotism'}
-                                    formik={formik}
-                                    type={'number'}
-                                    additionalProperties={{ min: 0, max: 99 }}
-                                >
-                                    Your neurotism is
-                                </Input>
-                                <Input
-                                    name={'agreeableness'}
-                                    formik={formik}
-                                    type={'number'}
-                                    additionalProperties={{ min: 0, max: 99 }}
-                                >
-                                    Your agreeableness is
-                                </Input>
-                            </>
-                        </Condition>
-                        <Condition
-                            eval={() =>
-                                formik.values.conscientiousness &&
-                                formik.values.openness &&
-                                formik.values.extraversion &&
-                                formik.values.neurotism &&
-                                formik.values.agreeableness
-                            }
-                        >
-                            <button
-                                className={'btn btn-primary mb-12'}
-                                type={'submit'}
-                                onSubmit={(e) => e && formik.handleSubmit}
+                        <>
+                            <h2>Your Big Five Values</h2>
+                            <Input
+                                name={'conscientiousness'}
+                                formik={formik}
+                                type={'number'}
+                                additionalProperties={{ min: 0, max: 99 }}
                             >
-                                Send Form
-                            </button>
-                        </Condition>
+                                Your conscientiousness is
+                            </Input>
+                            <Input
+                                name={'openness'}
+                                formik={formik}
+                                type={'number'}
+                                additionalProperties={{ min: 0, max: 99 }}
+                            >
+                                Your openness is
+                            </Input>
+                            <Input
+                                name={'extraversion'}
+                                formik={formik}
+                                type={'number'}
+                                additionalProperties={{ min: 0, max: 99 }}
+                            >
+                                Your extraversion is
+                            </Input>
+                            <Input
+                                name={'neurotism'}
+                                formik={formik}
+                                type={'number'}
+                                additionalProperties={{ min: 0, max: 99 }}
+                            >
+                                Your neurotism is
+                            </Input>
+                            <Input
+                                name={'agreeableness'}
+                                formik={formik}
+                                type={'number'}
+                                additionalProperties={{ min: 0, max: 99 }}
+                            >
+                                Your agreeableness is
+                            </Input>
+                        </>
+                        <button
+                            className={'btn btn-primary mb-12'}
+                            type={'submit'}
+                            onSubmit={(e) => e && formik.handleSubmit}
+                        >
+                            Send Form
+                        </button>
                     </form>
                 </div>
             )}

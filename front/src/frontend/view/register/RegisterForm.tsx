@@ -38,12 +38,38 @@ function createHandle(
 }
 
 class InputProps {
-    constructor(public name: string, public children: string, public type: string = 'text') {}
+    constructor(
+        public name: string,
+        public children: string,
+        public formik: FormikProps<any>,
+        public type?: string,
+        public additionalProperties?: object
+    ) {}
 }
 
-function Input(props: {}) {}
+function Input(props: InputProps) {
+    return (
+        <div className="form-group row">
+            <label htmlFor="name" className="col-sm-5 col-form-label">
+                {props.children}
+            </label>
+            <div className="col-sm-7">
+                <input
+                    className="form-control"
+                    type={props.type || 'text'}
+                    onChange={props.formik.handleChange}
+                    name={props.name}
+                    id={props.name}
+                    value={props.formik.values[props.name] || ''}
+                    {...(props.additionalProperties || {})}
+                />
+            </div>
+        </div>
+    );
+}
 
 export function RegisterForm() {
+    const i = new InputProps('ksi', 'chi', (null as unknown) as FormikProps<any>);
     const content = (
         <Formik
             enableReinitialize
@@ -51,63 +77,46 @@ export function RegisterForm() {
             onSubmit={(values: any) => finalSubmit(values)}
         >
             {(formik: FormikProps<any>) => (
-                <div className={'registerForm'}>
+                <div className={'container'}>
+                    <h1>Registration Form</h1>
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();
                             formik.handleSubmit(e);
                         }}
                     >
-                        <p className="form-group row">
-                            <label htmlFor="name" className="col-sm-2 col-form-label">
-                                Your name is
+                        <h2>Basic Data</h2>
+                        <Input name={'name'} formik={formik}>
+                            Your name is
+                        </Input>
+                        <Input name={'surname'} formik={formik}>
+                            Your surname is
+                        </Input>
+                        <div className="form-group row">
+                            <label htmlFor="name" className="col-sm-5 col-form-label">
+                                Your sex is
                             </label>
-                            <div className="col-sm-10">
-                                <input
-                                    className="form-control"
-                                    type={'text'}
+                            <div className="col-sm-7">
+                                <select
+                                    name="sex"
+                                    id="cars"
+                                    className={'form-control'}
                                     onChange={formik.handleChange}
-                                    name={'name'}
-                                    id={'name'}
-                                    value={formik.values.name}
-                                />
+                                    placeholder={'Choose Sex...'}
+                                    value={formik.values.sex}
+                                >
+                                    <option disabled selected value={''}>
+                                        {' '}
+                                        No sex{' '}
+                                    </option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
                             </div>
-                        </p>
-                        <p>
-                            A na nazwisko{' '}
-                            <input
-                                type={'text'}
-                                onChange={formik.handleChange}
-                                name={'surname'}
-                                value={formik.values.surname}
-                            />
-                        </p>
-                        <p>
-                            Twoja Płeć to{' '}
-                            <select
-                                name="sex"
-                                id="cars"
-                                onChange={formik.handleChange}
-                                placeholder={'Choose Sex...'}
-                                value={formik.values.sex}
-                            >
-                                <option disabled selected value={''}>
-                                    {' '}
-                                    No sex{' '}
-                                </option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
-                        </p>
-                        <p>
-                            Twoj email wyslemy na{' '}
-                            <input
-                                type={'text'}
-                                onChange={formik.handleChange}
-                                name={'mail'}
-                                value={formik.values.mail}
-                            />
-                        </p>
+                        </div>
+                        <Input name={'mail'} formik={formik}>
+                            Your activation mail will be sent to
+                        </Input>
                         <Condition
                             eval={() =>
                                 formik.values.name &&
@@ -116,77 +125,66 @@ export function RegisterForm() {
                                 formik.values.mail
                             }
                         >
-                            <p>
-                                <p>Wypełnij teraz swoje cechy big five</p>
-                                <>
-                                    Twoje Conscientiousness Wynosi{' '}
-                                    <input
-                                        type={'number'}
-                                        min={0}
-                                        max={99}
-                                        onChange={formik.handleChange}
-                                        name={'conscientiousness'}
-                                        value={formik.values.conscientiousness}
-                                    />
-                                    <br />
-                                    Twoje Openness Wynosi{' '}
-                                    <input
-                                        type={'number'}
-                                        min={0}
-                                        max={99}
-                                        onChange={formik.handleChange}
-                                        name={'openness'}
-                                        value={formik.values.openness}
-                                    />
-                                    <br />
-                                    Twoje Extraversion Wynosi{' '}
-                                    <input
-                                        type={'number'}
-                                        min={0}
-                                        max={99}
-                                        onChange={formik.handleChange}
-                                        name={'extraversion'}
-                                        value={formik.values.extraversion}
-                                    />
-                                    <br />
-                                    Twój Neurotism Wynosi{' '}
-                                    <input
-                                        type={'number'}
-                                        min={0}
-                                        max={99}
-                                        onChange={formik.handleChange}
-                                        name={'neurotism'}
-                                        value={formik.values.neurotism}
-                                    />
-                                    <br />
-                                    Twój Agreeableness Wynosi{' '}
-                                    <input
-                                        type={'number'}
-                                        min={0}
-                                        max={99}
-                                        onChange={formik.handleChange}
-                                        name={'agreeableness'}
-                                        value={formik.values.agreeableness}
-                                    />
-                                    <br />
-                                </>
-                                <Condition
-                                    eval={() =>
-                                        formik.values.conscientiousness &&
-                                        formik.values.openness &&
-                                        formik.values.extraversion &&
-                                        formik.values.neurotism &&
-                                        formik.values.agreeableness
-                                    }
+                            <>
+                                <h2>Your Big Five Values</h2>
+                                <Input
+                                    name={'conscientiousness'}
+                                    formik={formik}
+                                    type={'number'}
+                                    additionalProperties={{ min: 0, max: 99 }}
                                 >
-                                    <button
-                                        type={'submit'}
-                                        onSubmit={(e) => e && formik.handleSubmit}
-                                    >
-                                        Zatwierdź
-                                    </button>
-                                </Condition>
-                            </p>
+                                    Your conscientiousness is
+                                </Input>
+                                <Input
+                                    name={'openness'}
+                                    formik={formik}
+                                    type={'number'}
+                                    additionalProperties={{ min: 0, max: 99 }}
+                                >
+                                    Your openness is
+                                </Input>
+                                <Input
+                                    name={'extraversion'}
+                                    formik={formik}
+                                    type={'number'}
+                                    additionalProperties={{ min: 0, max: 99 }}
+                                >
+                                    Your extraversion is
+                                </Input>
+                                <Input
+                                    name={'neurotism'}
+                                    formik={formik}
+                                    type={'number'}
+                                    additionalProperties={{ min: 0, max: 99 }}
+                                >
+                                    Your neurotism is
+                                </Input>
+                                <Input
+                                    name={'agreeableness'}
+                                    formik={formik}
+                                    type={'number'}
+                                    additionalProperties={{ min: 0, max: 99 }}
+                                >
+                                    Your agreeableness is
+                                </Input>
+                            </>
+                        </Condition>
+                        <Condition
+                            eval={() =>
+                                formik.values.conscientiousness &&
+                                formik.values.openness &&
+                                formik.values.extraversion &&
+                                formik.values.neurotism &&
+                                formik.values.agreeableness
+                            }
+                        >
+                            <button
+                                className={'btn btn-primary mb-12'}
+                                type={'submit'}
+                                onSubmit={(e) => e && formik.handleSubmit}
+                            >
+                                Send Form
+                            </button>
                         </Condition>
                     </form>
                 </div>

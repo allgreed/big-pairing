@@ -37,6 +37,12 @@ function createHandle(
     };
 }
 
+class InputProps {
+    constructor(public name: string, public children: string, public type: string = 'text') {}
+}
+
+function Input(props: {}) {}
+
 export function RegisterForm() {
     const content = (
         <Formik
@@ -45,21 +51,28 @@ export function RegisterForm() {
             onSubmit={(values: any) => finalSubmit(values)}
         >
             {(formik: FormikProps<any>) => (
-                <div>
+                <div className={'registerForm'}>
                     <form
                         onSubmit={(e) => {
                             e.preventDefault();
                             formik.handleSubmit(e);
                         }}
                     >
-                        Na imię masz{' '}
-                        <input
-                            type={'text'}
-                            onChange={formik.handleChange}
-                            name={'name'}
-                            value={formik.values.name}
-                        />
-                        .
+                        <p className="form-group row">
+                            <label htmlFor="name" className="col-sm-2 col-form-label">
+                                Your name is
+                            </label>
+                            <div className="col-sm-10">
+                                <input
+                                    className="form-control"
+                                    type={'text'}
+                                    onChange={formik.handleChange}
+                                    name={'name'}
+                                    id={'name'}
+                                    value={formik.values.name}
+                                />
+                            </div>
+                        </p>
                         <p>
                             A na nazwisko{' '}
                             <input

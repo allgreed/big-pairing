@@ -50,6 +50,7 @@ job "bp" {
         }
         volumes = [
             "/var/eph/big-pairing/sqlite.db:/sqlite.db",
+            "/var/eph/big-pairing/sendgrid-api-key:/sendgrid-api-key",
         ]
       }
 

@@ -19,6 +19,7 @@ from pydantic import BaseModel
 from db import get_db, UniqueConstratintViolation
 from core import Traits, User, make_new_user 
 from repositories import UserRepository
+from emails import send_registration_email, get_email_provider
 
 
 the_router = APIRouter()
@@ -116,6 +117,13 @@ def create(data: UserCreateViewModel, r: UserRepository = Depends(get_user_repos
         # TODO: validate this eagerly
         violation_column = e.args[0].split("users.")[1]
         raise HTTPException(status_code=403, detail=f"{violation_column} is already taken")
+
+    # TODO: what to do when user is created sucessfully, but the email fails to be sent?
+
+    # TODO: use depends
+    _ = get_email_provider()
+    ep = next(_)
+    send_registration_email(address=new_user.email, nickname=new_user.nickname, send_email=ep)
 
     return new_user
 

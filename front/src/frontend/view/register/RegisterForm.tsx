@@ -1,5 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import '../../css/Main.css';
 import React, { ChangeEvent } from 'react';
 import axios from 'axios';
 import { TraitsDTO, UserCreateDTO } from '../../../common/api/register/UserCreateDTO';

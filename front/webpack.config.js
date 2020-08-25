@@ -32,15 +32,17 @@ const frontend = common({
   mode: 'development',
   target: 'web', // change to web if web lol
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, './dist/assets/'),
+    filename: 'bundle.js',
+    publicPath: '/assets/'
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: path.join(__dirname, './dist/'),
     compress: false,
-    port: 9000
+    port: 9000,
+    publicPath: '/assets/'
   },
-  plugins: [new HtmlWebpackPlugin({hash: true})]
+  plugins: [new HtmlWebpackPlugin({hash: true, filename: './../app/index.html'})]
 });
 
 module.exports = [frontend];

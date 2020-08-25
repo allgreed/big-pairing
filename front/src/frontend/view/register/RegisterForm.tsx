@@ -104,7 +104,7 @@ export function RegisterForm() {
                                             placeholder={'Choose Sex...'}
                                             value={formik.values.sex}
                                         >
-                                            <option disabled value={''}>
+                                            <option hidden value={''}>
                                                 Select Sex
                                             </option>
                                             <option value="Male">Male</option>

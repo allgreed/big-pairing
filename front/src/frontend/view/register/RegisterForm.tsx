@@ -39,7 +39,8 @@ class InputProps {
         public children: string,
         public formik: FormikProps<any>,
         public type?: string,
-        public additionalProperties?: object
+        public additionalProperties?: object,
+        public hint?: string
     ) {}
 }
 
@@ -59,6 +60,7 @@ function Input(props: InputProps) {
                     value={props.formik.values[props.name] || ''}
                     {...(props.additionalProperties || {})}
                 />
+                {props.hint ? <small className="form-text text-muted">{props.hint}</small> : null}
             </div>
         </div>
     );
@@ -127,6 +129,16 @@ export function RegisterForm() {
                                         </div>
                                         <div className={'my-5'}>
                                             <h2>Your Big Five Values</h2>
+                                            <h5 className={'my-3'}>
+                                                Please use one of those tests to get the values:{' '}
+                                                <a href={'https://openpsychometrics.org/'}>
+                                                    openpsychometrics
+                                                </a>{' '}
+                                                or{' '}
+                                                <a href={'https://www.understandmyself.com/'}>
+                                                    understandmyself
+                                                </a>
+                                            </h5>
                                             <Input
                                                 name={'conscientiousness'}
                                                 formik={formik}
@@ -140,8 +152,9 @@ export function RegisterForm() {
                                                 formik={formik}
                                                 type={'number'}
                                                 additionalProperties={{ min: 0, max: 99 }}
+                                                hint={'It is called differently in different tests'}
                                             >
-                                                Your openness is
+                                                Your openness or intellect/imagaination is
                                             </Input>
                                             <Input
                                                 name={'extraversion'}

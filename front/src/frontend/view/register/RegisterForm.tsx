@@ -3,7 +3,7 @@ import React, { ChangeEvent } from 'react';
 import axios from 'axios';
 import { TraitsDTO, UserCreateDTO } from '../../../common/api/register/UserCreateDTO';
 import { Formik, FormikProps } from 'formik';
-import { Route } from 'react-router-dom';
+import { Route, useHistory } from 'react-router-dom';
 
 function transformToApi(model: any) {
     return new UserCreateDTO(
@@ -21,10 +21,7 @@ function transformToApi(model: any) {
 }
 
 function finalSubmit(model: any) {
-    axios
-        .post('/api/users/', transformToApi(model))
-        .then(() => console.log('SEND!'))
-        .catch((err) => console.log(err));
+    return axios.post('/api/users/', transformToApi(model));
 }
 
 function createHandle(
@@ -68,6 +65,7 @@ function Input(props: InputProps) {
 }
 
 export function RegisterForm() {
+    const history = useHistory();
     return (
         <>
             <div className={'container'}>
@@ -76,7 +74,11 @@ export function RegisterForm() {
                         <Formik
                             enableReinitialize
                             initialValues={{ name: '', surname: '' }}
-                            onSubmit={(values: any) => finalSubmit(values)}
+                            onSubmit={(values: any) =>
+                                finalSubmit(values)
+                                    .then(() => history.push('/registered'))
+                                    .catch((err) => console.log(err))
+                            }
                         >
                             {(formik: FormikProps<any>) => (
                                 <>

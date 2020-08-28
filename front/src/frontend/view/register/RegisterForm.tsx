@@ -72,7 +72,7 @@ export function RegisterForm() {
         <>
             <div className={'container'}>
                 <div className={'p-5 my-5 card'}>
-                    <Route exact path={'/app/'}>
+                    <Route exact path={'/'}>
                         <Formik
                             enableReinitialize
                             initialValues={{ name: '', surname: '' }}
@@ -178,7 +178,7 @@ export function RegisterForm() {
                             )}
                         </Formik>
                     </Route>
-                    <Route exact path={'/app/registered'}>
+                    <Route exact path={'/registered'}>
                         <h1>You have been registered</h1>
                         <p className={'my-3'}>
                             Thank you for registering in our app.

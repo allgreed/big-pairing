@@ -4,7 +4,7 @@ import { RegisterForm } from './register/RegisterForm';
 
 export function Main(props: {}) {
     return (
-        <Router>
+        <Router basename={'/app'}>
             <RegisterForm />
         </Router>
     );

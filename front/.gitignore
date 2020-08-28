@@ -1,5 +1,4 @@
 node_modules
-dist/bundle.js
-dist/index.html
+dist/*
 .idea
 driver/chromedriver

@@ -44,6 +44,7 @@
     "style-loader": "^1.2.1",
     "ts-jest": "^25.5.1",
     "ts-loader": "^7.0.3",
+    "ts-node-dev": "^1.0.0-pre.60",
     "typescript": "^3.8.3",
     "url-join": "^4.0.1",
     "webpack": "^4.43.0",
@@ -53,8 +54,8 @@
   "name": "big-pairing",
   "scripts": {
     "start": "ts-node ./src/backend/server.ts",
-    "build": "webpack",
-    "dev": "webpack-dev-server --open",
+    "build": "rm -rf ./dist && webpack",
+    "dev": "ts-node-dev ./src/backend/server.ts",
     "test": "jest"
   },
   "version": "0.1.1"

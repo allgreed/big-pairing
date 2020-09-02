@@ -19,24 +19,25 @@ steps:
   - cd back
   - nix-shell --quiet --run 'make create-container'
   - cp $(readlink -f docker-image.tar.gz) ../docker-image.tar.gz # need to persist the image between stages and Drone only mounts CWD, so symlinks would fail
-## TODO: odgównić ścieżkę
+## TODO: odgównić ścieżkę? i zrobić przenoszenie zamiast kopiowania
 #
 - name: load-and-push-backend
   image: allgreed/nix:2.3.6
   commands:
-  - nix-env --quiet -iA nixpkgs.docker
-  - DOCKER_HOST=tcp://68.183.223.124:4243 docker load -i docker-image.tar.gz
-  - DOCKER_HOST=tcp://68.183.223.124:4243 docker login -u $USERNAME -p $PASSWORD
-  - DOCKER_HOST=tcp://68.183.223.124:4243 docker tag big-pairing-back:builded allgreed/big-pairing-back:latest
-  - DOCKER_HOST=tcp://68.183.223.124:4243 docker push allgreed/big-pairing-back:latest
-  - DOCKER_HOST=tcp://68.183.223.124:4243 docker tag  allgreed/big-pairing-back:latest allgreed/big-pairing-back:preview$DRONE_COMMIT_SHA
-  - DOCKER_HOST=tcp://68.183.223.124:4243 docker push allgreed/big-pairing-back:preview$DRONE_COMMIT_SHA
-  - DOCKER_HOST=tcp://68.183.223.124:4243 docker logout
+  - nix-env --quiet -iA nixpkgs.podman
+  - export REPOTAG=allgreed/big-pairing-back:latest
+  - podman --storage-driver=vfs login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - podman --storage-driver=vfs load -i docker-image.tar.gz  | cut -f 2,3 -d':' > .loaded-image-tag
+  - podman --storage-driver=vfs tag `cat .loaded-image-tag` $REPOTAG
+  - podman --storage-driver=vfs push $REPOTAG
+  - podman --storage-driver=vfs tag $REPOTAG allgreed/big-pairing-back:preview$DRONE_COMMIT_SHA
+  - podman --storage-driver=vfs push allgreed/big-pairing-back:preview$DRONE_COMMIT_SHA 
+  - podman --storage-driver=vfs logout
   environment:
-      USERNAME:
-        from_secret: docker_username
-      PASSWORD:
+    DOCKER_PASSWORD:
         from_secret: docker_password
+    DOCKER_USERNAME:
+        from_secret: docker_username
   when:
     branch:
     - master

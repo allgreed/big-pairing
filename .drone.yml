@@ -26,7 +26,7 @@ steps:
   commands:
   - nix-env --quiet -iA nixpkgs.podman
   - export REPOTAG=allgreed/big-pairing-back:latest
-  - podman --storage-driver=vfs login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - podman --storage-driver=vfs login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD docker.io
   - podman --storage-driver=vfs load -i docker-image.tar.gz  | cut -f 2,3 -d':' > .loaded-image-tag
   - podman --storage-driver=vfs tag `cat .loaded-image-tag` $REPOTAG
   - podman --storage-driver=vfs push $REPOTAG

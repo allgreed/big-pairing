@@ -22,9 +22,8 @@ steps:
 ## TODO: odgównić ścieżkę? i zrobić przenoszenie zamiast kopiowania
 #
 - name: load-and-push-backend
-  image: allgreed/nix:2.3.6
+  image: marshallford/podman
   commands:
-  - nix-env --quiet -iA nixpkgs.podman
   - export REPOTAG=allgreed/big-pairing-back:latest
   - podman --storage-driver=vfs login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD docker.io
   - podman --storage-driver=vfs load -i docker-image.tar.gz  | cut -f 2,3 -d':' > .loaded-image-tag

@@ -19,24 +19,17 @@ steps:
   - cd back
   - nix-shell --quiet --run 'make create-container'
   - cp $(readlink -f docker-image.tar.gz) ../docker-image.tar.gz # need to persist the image between stages and Drone only mounts CWD, so symlinks would fail
-## TODO: odgównić ścieżkę? i zrobić przenoszenie zamiast kopiowania
-#
-- name: load-and-push-backend
-  image: marshallford/podman
-  commands:
-  - export REPOTAG=allgreed/big-pairing-back:latest
-  - podman --storage-driver=vfs login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD docker.io
-  - podman --storage-driver=vfs load -i docker-image.tar.gz  | cut -f 2,3 -d':' > .loaded-image-tag
-  - podman --storage-driver=vfs tag `cat .loaded-image-tag` $REPOTAG
-  - podman --storage-driver=vfs push $REPOTAG
-  - podman --storage-driver=vfs tag $REPOTAG allgreed/big-pairing-back:preview$DRONE_COMMIT_SHA
-  - podman --storage-driver=vfs push allgreed/big-pairing-back:preview$DRONE_COMMIT_SHA 
-  - podman --storage-driver=vfs logout
-  environment:
-    DOCKER_PASSWORD:
-        from_secret: docker_password
-    DOCKER_USERNAME:
-        from_secret: docker_username
+# TODO: move instead of copy to save time!
+
+- name: load-and-store-backend
+  image: allgreed/drone-load-and-store
+  settings:
+    archive: docker-image.tar.gz
+    repo: allgreed/big-pairing-back
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
   when:
     branch:
     - master
